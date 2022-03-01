@@ -33,25 +33,28 @@ public class UserService {
 
     //POST
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
+        System.out.println("CCC3");
         //중복
-        if(userProvider.checkEmail(postUserReq.getEmail()) ==1){
+        if(userProvider.checkEmail(postUserReq.getUserEmail()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
 
         String pwd;
         try{
             //암호화
-            pwd = new SHA256().encrypt(postUserReq.getPassword());
-            postUserReq.setPassword(pwd);
+            pwd = new SHA256().encrypt(postUserReq.getUserPwd());
+            postUserReq.setUserPwd(pwd);
 
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
-            int userIdx = userDao.createUser(postUserReq);
+            System.out.println("CCC4");
+            int Idx = userDao.createUser(postUserReq);
             //jwt 발급.
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(jwt,userIdx);
+            String jwt = jwtService.createJwt(Idx);
+            System.out.println("CCC5");
+            return new PostUserRes(jwt,Idx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

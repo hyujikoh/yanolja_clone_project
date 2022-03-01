@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Table;
+
 @Getter
 @Setter
 @AllArgsConstructor
+@Table(name="User")
 public class PostUserReq {
-
-    private String id;
-    private String UserName;
+    private String userName;
+    private String userPhone;
     private String userBirth;
-    private String email;
-    private String password;
-    private String phoneNumer;
+    private String userEmail;
+    private String userNickname;
+    private String userPwd;
 }

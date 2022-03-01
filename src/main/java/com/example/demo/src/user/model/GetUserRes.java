@@ -5,14 +5,29 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Getter
 @Setter
 @AllArgsConstructor
+@Entity
+
+@Table(name = "User")
 public class GetUserRes {
-    private int Idx;
+    @Id
+    @Column(name="Idx")
+    private int userIdx;
+
     private String userName;
-    private String password;
+    private String userPwd;
     private String userNickname;
-    private String email;
-    private String phoneNumber;
+    private String userEmail;
+    private String userPhone;
+
+    public GetUserRes() {
+
+    }
 }

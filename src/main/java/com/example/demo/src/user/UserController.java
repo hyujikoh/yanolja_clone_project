@@ -66,9 +66,10 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
     // Path-variable
+    //변수명은 무조건 동일하게!!!!
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx ){
         // Get Users
         try{
             GetUserRes getUserRes = userProvider.getUser(userIdx);
@@ -89,14 +90,16 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEmail() == null){
+        System.out.println("CCC1");
+        if(postUserReq.getUserEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
         //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEmail())){
+        if(!isRegexEmail(postUserReq.getUserEmail())){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
         try{
+            System.out.println("CCC2");
             PostUserRes postUserRes = userService.createUser(postUserReq);
             System.out.println("1");
             return new BaseResponse<>(postUserRes);
