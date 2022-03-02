@@ -25,6 +25,7 @@ public class User {
     private String userEmail;
     private String userPhone;
     private String userNickname;
+    private String status;
     public User() {
 
     }

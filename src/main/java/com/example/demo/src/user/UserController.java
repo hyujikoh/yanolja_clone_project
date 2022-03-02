@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
 @RequestMapping("/app/users")
@@ -97,6 +97,19 @@ public class UserController {
         //이메일 정규표현
         if(!isRegexEmail(postUserReq.getUserEmail())){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+        }
+
+        // 전화번호 정규 표현 내가함!
+        if(!isRegexPhone(postUserReq.getUserPhone())){
+
+            return new BaseResponse<>(POST_USERS_INVALID_PHONE);
+        }
+        //아이디 정규식 내가함!
+        if(!isRegexUserName(postUserReq.getUserName())){
+            return new BaseResponse<>(POST_USERS_INVALID_USERNAME);
+        }
+        if(!isRegexPassword(postUserReq.getUserPwd())){
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
         }
         try{
             System.out.println("CCC2");
@@ -209,7 +222,7 @@ public class UserController {
     }
 
     /**
-     * 2. 유저정보변경 API 이메일 변경!!! 오현직 메이드
+     * 3. 유저정보변경 API 이메일 변경!!! 오현직 메이드
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
@@ -228,5 +241,29 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+
+    /**
+     * 4. 유저탈퇴(status ACTIVATE  -> INACTIVATE 로 상태 변경) 오현직 메이드
+     * [PATCH] /users/:userIdx
+     * @return BaseResponse<String>
+     */
+//    @ResponseBody
+//    @PatchMapping("/{Idx}/status")
+//    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody User user){
+//        System.out.println("00");
+//        try {
+//            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(Idx,user.getStatus());
+//            userService.modifyUserStatus(patchUserStatusReq);
+//            String result = "";
+//            System.out.println("상태11");
+//            return new BaseResponse<>(result);
+//        } catch (BaseException exception) {
+//            System.out.println("컨트럴러 캐치 에러나옴 ");
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
+
 
 }

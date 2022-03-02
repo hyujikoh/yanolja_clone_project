@@ -110,6 +110,14 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserEmailQuery, modifyUserEmailParams);
     }
 
+    //내가 만든 패치 3 !
+//    public int modifyUserStatus(PatchUserStatusReq patchUserStatusReq) {
+//        String modifyUserStatusQuery = "update User set status = 'INACTIVATE' where Idx = ? ";
+//        Object[] modifyUserStatusParams = new Object[]{patchUserStatusReq.getIdx()};
+//
+//        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
+//    }
+
 
 
     public User getPwd(PostLoginReq postLoginReq) {
@@ -123,8 +131,9 @@ public class UserDao {
                         rs.getString("userPwd"),
                         rs.getString("userEmail"),
                         rs.getString("userPhone"),
-                        rs.getString("userNickname")
-                        ),
+                        rs.getString("userNickname"),
+                        rs.getString("status")
+                ),
                 getPwdParams
         );
 

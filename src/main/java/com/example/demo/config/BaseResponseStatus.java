@@ -29,6 +29,9 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    POST_USERS_INVALID_PHONE(false,2018,"전화번호 형식을 확인해주세요."),
+    POST_USERS_INVALID_USERNAME(false,2019,"아이디형식을 확인해주세요."),
+    POST_USERS_INVALID_PASSWORD(false,2019,"비밀번호 형식이 잘못되었습니다. 6~12자 영문,숫자, 특수문자포함"),
 
 
 
@@ -54,6 +57,7 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
     MODIFY_FAIL_USERNICKNAME(false,4015,"유저네임 수정 실패"), // 내가만듬!
     MODIFY_FAIL_USEREMAIL(false,4016,"유저이메일 수정 실패"), // 내가만듬!
+    MODIFY_FAIL_USERSTATUS(false,4016,"유저상태 수정 실패"), // 내가만듬!
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
 
