@@ -153,7 +153,7 @@ public class UserController {
     }
 
     /**
-     * 유저정보변경 API 핸드폰 번호 변경!!! 오현직 메이드
+     * 1. 유저정보변경 API 핸드폰 번호 변경!!! 오현직 메이드
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
@@ -185,7 +185,7 @@ public class UserController {
     }
 
     /**
-     * 유저정보변경 API 닉네임 변경!!! 오현직 메이드
+     * 2. 유저정보변경 API 닉네임 변경!!! 오현직 메이드
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
@@ -208,5 +208,25 @@ public class UserController {
         }
     }
 
+    /**
+     * 2. 유저정보변경 API 이메일 변경!!! 오현직 메이드
+     * [PATCH] /users/:userIdx
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{Idx}/email")
+    public BaseResponse<String> modifyUserEmail(@PathVariable("Idx") int Idx, @RequestBody User user){
+        System.out.println("00");
+        try {
+            PatchUserEmailReq patchUserEmailReq = new PatchUserEmailReq(Idx,user.getUserEmail());
+            userService.modifyUserEmail(patchUserEmailReq);
+            String result = "";
+            System.out.println("email1");
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            System.out.println("컨트럴러 캐치 에러나옴 ");
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 }

@@ -102,6 +102,13 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserNicknameQuery, modifyUserNicknameParams);
     }
+    //내가 만든 패치 2 !
+    public int modifyUserEmail(PatchUserEmailReq patchUserEmailReq) {
+        String modifyUserEmailQuery = "update User set userEmail = ? where Idx = ? ";
+        Object[] modifyUserEmailParams = new Object[]{patchUserEmailReq.getUserEmail(), patchUserEmailReq.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserEmailQuery, modifyUserEmailParams);
+    }
 
 
 

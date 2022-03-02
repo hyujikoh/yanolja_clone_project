@@ -96,4 +96,16 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    /* 오현직이 추가한 이메일 번경하는 서비스 처리기기*/
+    public void modifyUserEmail(PatchUserEmailReq patchUserEmailReq) throws BaseException {
+        try{
+            System.out.println("service 이메일");
+            int result = userDao.modifyUserEmail(patchUserEmailReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USEREMAIL);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
