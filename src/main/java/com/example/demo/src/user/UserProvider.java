@@ -78,8 +78,8 @@ public class UserProvider {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if(user.getPassword().equals(encryptPwd)){
-            int userIdx = user.getUserIdx();
+        if(user.getUserPwd().equals(encryptPwd)){
+            int userIdx = user.getIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostLoginRes(userIdx,jwt);
         }

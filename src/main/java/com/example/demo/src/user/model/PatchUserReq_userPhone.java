@@ -12,11 +12,17 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table(name = "User")
-public class PatchUserReq {
-    @Id
-    @Column(name="Idx")
-    private int userIdx;
-    private String userName;
+@Table(name="User")
+@Entity
 
+public class PatchUserReq_userPhone {
+    @Id
+//    @Column(name="Idx")
+    private int Idx;
+
+    private String userPhone;
+
+    public PatchUserReq_userPhone() {
+
+    }
 }

@@ -88,6 +88,22 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams);
     }
+// 내가 만듬 패치 1 !
+    public int modifyUserPhone(PatchUserReq_userPhone patchUserReq_userPhone) {
+        String modifyUserPhoneQuery = "update User set userPhone = ? where Idx = ? ";
+        Object[] modifyUserPhoneParams = new Object[]{patchUserReq_userPhone.getUserPhone(), patchUserReq_userPhone.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserPhoneQuery, modifyUserPhoneParams);
+    }
+    //내가 만든 패치 2 !
+    public int modifyUserNickname(PatchUserNicknameReq patchUserNicknameReq) {
+        String modifyUserNicknameQuery = "update User set userNickname = ? where Idx = ? ";
+        Object[] modifyUserNicknameParams = new Object[]{patchUserNicknameReq.getUserNickname(), patchUserNicknameReq.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserNicknameQuery, modifyUserNicknameParams);
+    }
+
+
 
     public User getPwd(PostLoginReq postLoginReq) {
         String getPwdQuery = "select userIdx, password,email,userName,ID from UserInfo where ID = ?";
@@ -96,11 +112,12 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new User(
                         rs.getInt("userIdx"),
-                        rs.getString("ID"),
                         rs.getString("userName"),
-                        rs.getString("password"),
-                        rs.getString("email")
-                ),
+                        rs.getString("userPwd"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPhone"),
+                        rs.getString("userNickname")
+                        ),
                 getPwdParams
         );
 

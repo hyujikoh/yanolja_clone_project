@@ -70,4 +70,30 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /* 오현직이 추가한 핸드폰번호 번경하는 서비스 처리기기*/
+   public void modifyUserPhone(PatchUserReq_userPhone patchUserReq_userPhone) throws BaseException {
+        try{
+            System.out.println("phone1");
+            int result = userDao.modifyUserPhone(patchUserReq_userPhone);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /* 오현직이 추가한 핸드폰번호 번경하는 서비스 처리기기*/
+    public void modifyUserNickname(PatchUserNicknameReq patchUserNicknameReq) throws BaseException {
+        try{
+            System.out.println("service 닉네임");
+            int result = userDao.modifyUserNickname(patchUserNicknameReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

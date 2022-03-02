@@ -55,13 +55,15 @@ public class JwtService {
         if(accessToken == null || accessToken.length() == 0){
             throw new BaseException(EMPTY_JWT);
         }
-
+        System.out.println(accessToken);
         // 2. JWT parsing
         Jws<Claims> claims;
         try{
+            System.out.println("파싱전");
             claims = Jwts.parser()
                     .setSigningKey(Secret.JWT_SECRET_KEY)
                     .parseClaimsJws(accessToken);
+            System.out.println("파싱후");
         } catch (Exception ignored) {
             throw new BaseException(INVALID_JWT);
         }

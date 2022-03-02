@@ -87,7 +87,7 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @PostMapping("")
+    @PostMapping("/sign-in")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         System.out.println("CCC1");
@@ -148,6 +148,62 @@ public class UserController {
             String result = "";
         return new BaseResponse<>(result);
         } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 유저정보변경 API 핸드폰 번호 변경!!! 오현직 메이드
+     * [PATCH] /users/:userIdx
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{Idx}/phone")
+    public BaseResponse<String> modifyUserPhone(@PathVariable("Idx") int Idx, @RequestBody User user){
+        System.out.println("00");
+
+        try {
+            //jwt에서 idx 추출.
+            System.out.println("시전");
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            System.out.println(userIdxByJwt);
+//            if(userIdx != userIdxByJwt){
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+            //같다면 유저네임 변경
+            PatchUserReq_userPhone patchUserReq_userPhone = new PatchUserReq_userPhone(Idx,user.getUserPhone());
+            userService.modifyUserPhone(patchUserReq_userPhone);
+
+            String result = "";
+            System.out.println("phone1");
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            System.out.println("컨트럴러 캐치 에러나옴 ");
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 유저정보변경 API 닉네임 변경!!! 오현직 메이드
+     * [PATCH] /users/:userIdx
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{Idx}/nickname")
+    public BaseResponse<String> modifyUserNickname(@PathVariable("Idx") int Idx, @RequestBody User user){
+        System.out.println("00");
+
+        try {
+
+            PatchUserNicknameReq patchUserNicknameReq = new PatchUserNicknameReq(Idx,user.getUserNickname());
+            userService.modifyUserNickname(patchUserNicknameReq);
+
+            String result = "";
+            System.out.println("phone1");
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            System.out.println("컨트럴러 캐치 에러나옴 ");
             return new BaseResponse<>((exception.getStatus()));
         }
     }
