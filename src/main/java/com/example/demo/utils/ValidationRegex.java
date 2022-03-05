@@ -24,7 +24,7 @@ public class ValidationRegex {
     }
 
     public static boolean isRegexPassword(String target){
-        String regex = "^[A-Za-z0-9!@#$%]{8,16}$"; //6~12자 영문,숫자조합,특수문자
+        String regex = "^[A-Za-z0-9!@#$%]{8,20}$"; //6~12자 영문,숫자조합,특수문자
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(target);
         return matcher.find();

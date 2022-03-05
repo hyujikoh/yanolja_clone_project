@@ -13,7 +13,6 @@ import javax.persistence.Table;
 public class PostUserReq {
     private String userName;
     private String userPhone;
-    private String userBirth;
     private String userEmail;
     private String userNickname;
     private String userPwd;

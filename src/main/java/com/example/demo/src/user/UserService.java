@@ -53,7 +53,8 @@ public class UserService {
             int Idx = userDao.createUser(postUserReq);
             //jwt 발급.
             String jwt = jwtService.createJwt(Idx);
-            System.out.println("CCC5");
+            System.out.println(jwt);
+
             return new PostUserRes(jwt,Idx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -114,7 +115,7 @@ public class UserService {
 //            System.out.println("service 유저상태");
 //            int result = userDao.modifyUserStatus(patchUserStatusReq);
 //            if(result == 0){
-//                throw new BaseException(MODIFY_FAIL_USEREMAIL);
+//                throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
 //            }
 //        } catch(Exception exception){
 //            throw new BaseException(DATABASE_ERROR);

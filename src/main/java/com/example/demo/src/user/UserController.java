@@ -254,7 +254,7 @@ public class UserController {
 //    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody User user){
 //        System.out.println("00");
 //        try {
-//            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(Idx,user.getStatus());
+//            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(Idx,user.getUserPwd());
 //            userService.modifyUserStatus(patchUserStatusReq);
 //            String result = "";
 //            System.out.println("상태11");

@@ -34,7 +34,9 @@ public class UserProvider {
     public List<GetUserRes> getUsers() throws BaseException{
         try{
             List<GetUserRes> getUserRes = userDao.getUsers();
+
             return getUserRes;
+
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
