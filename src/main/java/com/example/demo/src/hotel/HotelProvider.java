@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -54,8 +57,19 @@ public class HotelProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-
+    // 호텔 룸 정보
+@Transactional
+    public List getHotelrooms(int hotelIdx) throws BaseException {
+        try {
+            List getHotelinfo = hotelDao.HotelInfo(hotelIdx);
+            List hotelImg = hotelDao.HotelImages(hotelIdx); //O
+            List roominfo = hotelDao.HotelRoomInfo(hotelIdx);
+            List resultDetailList = new ArrayList<>(Arrays.asList(hotelImg,getHotelinfo,roominfo));
+            return resultDetailList;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public GetHotelRes getHotel(int hotelIdx) throws BaseException {
         try {
             System.out.println("호텔1개 검색 2");

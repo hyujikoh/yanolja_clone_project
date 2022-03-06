@@ -97,6 +97,31 @@ public class HotelController {
 
     }
 
+
+
+
+    /**
+     * 특정 호텔 방 정보
+     * [GET] /app/hotels/{hotelIdx}/room
+     * @return BaseResponse<GetUserRes>
+     */
+    // Path-variable
+    //변수명은 무조건 동일하게!!!!
+    @ResponseBody
+    @GetMapping("/{hotelIdx}/room") // (GET) 127.0.0.1:9000/app/hotels/:hotelIdx
+    public BaseResponse<List<String>> getHotelrooms(@PathVariable("hotelIdx") int hotelIdx ){
+        // Get Users
+        try{
+            System.out.println("호텔방개 검색 1 ");
+            List<String> getHotelrooms = hotelProvider.getHotelrooms(hotelIdx);
+            System.out.println("호텔방개 검색 끝");
+            return new BaseResponse<>(getHotelrooms);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
 //    /**
 //     * 회원가입 API
 //     * [POST] /users
