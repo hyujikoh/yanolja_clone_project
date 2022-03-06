@@ -178,12 +178,12 @@ public class UserController {
         try {
             //jwt에서 idx 추출.
             System.out.println("시전");
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            System.out.println(userIdxByJwt);
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            System.out.println(userIdxByJwt);
+            if(Idx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             //같다면 유저네임 변경
             PatchUserReq_userPhone patchUserReq_userPhone = new PatchUserReq_userPhone(Idx,user.getUserPhone());
             userService.modifyUserPhone(patchUserReq_userPhone);

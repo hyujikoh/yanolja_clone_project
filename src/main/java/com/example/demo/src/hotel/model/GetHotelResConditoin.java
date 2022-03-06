@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 
 public class GetHotelResConditoin {
+    private int Idx;
     private String hotelName;
     private String hotelLocation;
     private int hotelOpt;
@@ -22,9 +23,9 @@ public class GetHotelResConditoin {
     private String imageUrl;
     private int reviewcount;
     private float reviewavg;
-   private int  stayprice;
+   private String  stayprice;
     private int  staypricediscount;
-  private int  dayuseprice;
+  private String  dayuseprice;
     private int  dayusepricediscount;
     private String hotelDesc;
 }

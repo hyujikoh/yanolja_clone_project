@@ -22,21 +22,22 @@ public class HotelDao {
     public List<GetHotelResConditoin> getHotels() {
         System.out.println("다오에러 전체조회");
         String getHotelByhotelNameQuery =
-                        "       hotelName  ,\n" +
-                        "       hotelLocation,\n" +
-                        "       hotelOpt   옵션,\n" +
-                        "       auth       인증,\n" +
-                        "       imageUrl   이미지,\n" +
-                        "       리뷰수,\n" +
-                        "       평점,\n" +
-                        "       숙박가격,\n" +
-                        "       숙박할인가격,\n" +
-                        "       대실가격,\n" +
-                        "       대실할인가격,\n" +
-                        "       hotelDesc  호텔특징\n" +
+                "select H.Idx,\n" +
+                        "       H.hotelName  ,\n" +
+                        "       H.hotelLocation,\n" +
+                        "       H.hotelOpt   ,\n" +
+                        "       H.auth       ,\n" +
+                        "       imageUrl   ,\n" +
+                        "       reviewcount,\n" +
+                        "       reviewavg,\n" +
+                        "       stayprice,\n" +
+                "       staypricediscount,\n" +
+                        "       dayuseprice,\n" +
+                "       dayusepricediscount,\n" +
+                        "       H.hotelDesc  \n" +
                         "from Hotel H\n" +
                         "         inner join (select * from HotelImage WHERE type = 1) R1 on (R1.hotelIdx = H.Idx)\n" +
-                        "         inner join (select count(*) as 리뷰수, round(avg(reviewRate), 1) as 평점, hotelIdx 호텔번호\n" +
+                        "         inner join (select count(*) as reviewcount, round(avg(reviewRate), 1) as reviewavg, hotelIdx 호텔번호\n" +
                         "                     from Review Rev\n" +
                         "                              inner join (select Idx, hotelIdx from Reserve) Reserve on (Reserve.Idx = Rev.reserveIdx)\n" +
                         "                     group by hotelIdx) R2 on (H.Idx = R2.호텔번호)\n" +
@@ -44,101 +45,100 @@ public class HotelDao {
                         "         inner join (select idx,\n" +
                         "                            roomName,\n" +
                         "                            roomType,\n" +
-                        "                            숙박가격 ,\n" +
-                        "                            숙박할인가격,\n" +
-                        "                            대실가격 ,\n" +
-                        "                            대실할인가격,\n" +
+                        "                            case when roomCount = 0 then '예약마감' else 가격 end  as stayprice,\n" +
+                        "                            staypricediscount,\n" +
+                        "                            대실가격 as dayuseprice,\n" +
+                        "                            dayusepricediscount,\n" +
                         "                            hotelIdx\n" +
                         "                     from Room R0\n" +
-                        "                              left outer join (select roomdx, 숙박가격 , 숙박할인가격, 대실가격, 대실할인가격\n" +
+                        "                              left outer join (select roomdx, 숙박가격 가격, 숙박할인가격 as staypricediscount, 대실가격, 대실할인가격 as dayusepricediscount  \n" +
                         "                                               from Price\n" +
                         "                                               where case\n" +
                         "                                                         when dayofweek(now()) = (6 or 7) then dayType = 2\n" +
                         "                                                         else dayType = 1 end\n" +
                         "                     ) R on (R.roomdx = R0.Idx)) R3 on (R3.hotelIdx = H.Idx)\n" +
-                        "\n" +
                         "group by H.Idx;";
         return this.jdbcTemplate.query(getHotelByhotelNameQuery,
                 (rs, rowNum) -> new GetHotelResConditoin(
-
+                        rs.getInt("Idx"),
                         rs.getString("hotelName"),
                         rs.getString("hotelLocation"),
-                        rs.getInt("옵션"),
-                        rs.getInt("인증"),
-                        rs.getString("이미지"),
-                        rs.getInt("리뷰수"),
-                        rs.getFloat("평점"),
-                        rs.getInt("숙박가격"),
-                        rs.getInt("숙박할인가격"),
-                        rs.getInt("대실가격"),
-                        rs.getInt("대실할인가격"),
-                        rs.getString("호텔특징"))
-                );
+                        rs.getInt("hotelOpt"),
+                        rs.getInt("auth"),
+                        rs.getString("imageUrl"),
+                        rs.getInt("reviewcount"),
+                        rs.getFloat("reviewavg"),
+                        rs.getString("stayprice"),
+                        rs.getInt("staypricediscount"),
+                        rs.getString("dayuseprice"),
+                        rs.getInt("dayusepricediscount"),
+                        rs.getString("hotelDesc"))
+        );
     }
 
     public List<GetHotelResConditoin> HotelByhotelName(String hotelName) {
         String getHotelByhotelNameQuery1 =
-
-                        "       hotelName  ,\n" +
-                        "       hotelLocation,\n" +
-                        "       hotelOpt   옵션,\n" +
-                        "       auth       인증,\n" +
-                        "       imageUrl   이미지,\n" +
-                        "       리뷰수,\n" +
-                        "       평점,\n" +
-                       "       숙박가격,\n" +
-                        "       숙박할인가격,\n" +
-                      "       대실가격,\n" +
-                        "       대실할인가격,\n" +
-                        "       hotelDesc  호텔특징\n" +
-                        "from Hotel H\n" +
-                        "         inner join (select * from HotelImage WHERE type = 1) R1 on (R1.hotelIdx = H.Idx)\n" +
-                        "         inner join (select count(*) as 리뷰수, round(avg(reviewRate), 1) as 평점, hotelIdx 호텔번호\n" +
-                        "                     from Review Rev\n" +
-                        "                              inner join (select Idx, hotelIdx from Reserve) Reserve on (Reserve.Idx = Rev.reserveIdx)\n" +
-                        "                     group by hotelIdx) R2 on (H.Idx = R2.호텔번호)\n" +
-                        "\n" +
-                        "         inner join (select idx,\n" +
-                        "                            roomName,\n" +
-                        "                            roomType,\n" +
-                        "                            가격 ,\n" +
-                        "                            숙박할인가격,\n" +
-                        "                            대실가격 ,\n" +
-                        "                            대실할인가격,\n" +
-                        "                            hotelIdx\n" +
-                        "                     from Room R0\n" +
-                        "                              left outer join (select roomdx, 숙박가격 , 숙박할인가격, 대실가격, 대실할인가격\n" +
-                        "                                               from Price\n" +
-                        "                                               where case\n" +
-                        "                                                         when dayofweek(now()) = (6 or 7) then dayType = 2\n" +
-                        "                                                         else dayType = 1 end\n" +
-                        "                     ) R on (R.roomdx = R0.Idx)) R3 on (R3.hotelIdx = H.Idx)\n" +
-                        "\n" +
-                        "where hotelName like concat('%',?, '%') "+
-                        "group by H.Idx;";
-        String  getHotelByhotelNameParams=hotelName;
+        "select H.Idx,\n" +
+                "       H.hotelName  ,\n" +
+                "       H.hotelLocation,\n" +
+                "       H.hotelOpt   ,\n" +
+                "       H.auth       ,\n" +
+                "       imageUrl   ,\n" +
+                "       reviewcount,\n" +
+                "       reviewavg,\n" +
+                "       stayprice,\n" +
+                "       staypricediscount,\n" +
+                "       dayuseprice,\n" +
+                "       dayusepricediscount,\n" +
+                "       H.hotelDesc  \n" +
+                "from Hotel H\n" +
+                "         inner join (select * from HotelImage WHERE type = 1) R1 on (R1.hotelIdx = H.Idx)\n" +
+                "         inner join (select count(*) as reviewcount, round(avg(reviewRate), 1) as reviewavg, hotelIdx 호텔번호\n" +
+                "                     from Review Rev\n" +
+                "                              inner join (select Idx, hotelIdx from Reserve) Reserve on (Reserve.Idx = Rev.reserveIdx)\n" +
+                "                     group by hotelIdx) R2 on (H.Idx = R2.호텔번호)\n" +
+                "\n" +
+                "         inner join (select idx,\n" +
+                "                            roomName,\n" +
+                "                            roomType,\n" +
+                "                            case when roomCount = 0 then '예약마감' else 가격 end  as stayprice,\n" +
+                "                            staypricediscount,\n" +
+                "                            대실가격 as dayuseprice,\n" +
+                "                            dayusepricediscount,\n" +
+                "                            hotelIdx\n" +
+                "                     from Room R0\n" +
+                "                              left outer join (select roomdx, 숙박가격 가격, 숙박할인가격 as staypricediscount, 대실가격, 대실할인가격 as dayusepricediscount\n" +
+                "                                               from Price\n" +
+                "                                               where case\n" +
+                "                                                         when dayofweek(now()) = (6 or 7) then dayType = 2\n" +
+                "                                                         else dayType = 1 end\n" +
+                "                     ) R on (R.roomdx = R0.Idx)) R3 on (R3.hotelIdx = H.Idx)\n" +
+                "where hotelName like concat('%',?,'%')\n" +
+                "group by H.Idx;";
+        String getHotelByhotelNameParams = hotelName;
         System.out.println("다오에러");
         return this.jdbcTemplate.query(getHotelByhotelNameQuery1,
                 (rs, rowNum) -> new GetHotelResConditoin(
+                        rs.getInt("Idx"),
                         rs.getString("hotelName"),
                         rs.getString("hotelLocation"),
-                        rs.getInt("옵션"),
-                        rs.getInt("인증"),
-                        rs.getString("이미지"),
-                        rs.getInt("리뷰수"),
-                        rs.getFloat("평점"),
-                      rs.getInt("가격"),
-                        rs.getInt("숙박할인가격"),
-                        rs.getInt("대실가격"),
-                        rs.getInt("대실할인가격"),
-                        rs.getString("호텔특징")),
+                        rs.getInt("hotelOpt"),
+                        rs.getInt("auth"),
+                        rs.getString("imageUrl"),
+                        rs.getInt("reviewcount"),
+                        rs.getFloat("reviewavg"),
+                        rs.getString("stayprice"),
+                        rs.getInt("staypricediscount"),
+                        rs.getString("dayuseprice"),
+                        rs.getInt("dayusepricediscount"),
+                        rs.getString("hotelDesc")),
                 getHotelByhotelNameParams);
     }
 
     // 유저 조회 를 호텔 인덱스 기준으로 조회하게 한다.
     public GetHotelRes getHotel(int hotelIdx) {
         String getHotelQuery = "select H.Idx ,H.hotelName 이름 ,H.hotelLocationDesc asd, H.hotelType 김, H.locationType ,  H.hotelDesc  \n" +
-                "from Hotel H where Idx = ?"; /// 수정해라!!!!!!!
+                "from Hotel H where Idx = ?"; // 수정해라!!!!!!!
         int getHotelParams = hotelIdx;
         System.out.println("호텔1개 검색 전전");
         return this.jdbcTemplate.queryForObject(getHotelQuery,

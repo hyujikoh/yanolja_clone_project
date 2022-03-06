@@ -46,19 +46,19 @@ public class HotelController {
      * 호텔조회 API
      * [GET] /hotels
      * 호텔 번호 출력 API
-     * [GET] /hotel? hotleName=
+     * [GET] /hotel?hotleName=
      * @return BaseResponse<List<GetUserRes>> 이것도 수정
      */
     //Query String
     @ResponseBody
     @GetMapping("") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetHotelResConditoin>> getHotels(@RequestParam(required = false) String hotelName) { //
+    public BaseResponse<List<GetHotelResConditoin>> HotelByhotelName(@RequestParam(required = false) String hotelName) { //
         try{
             if(hotelName == null){
                 System.out.println("1");
                 List<GetHotelResConditoin> getHotelResConditoin = hotelProvider.getHotels();
                 System.out.println("0");
-                return new BaseResponse<>(getHotelResConditoin);
+            return new BaseResponse<>(getHotelResConditoin);
             }
             // Get Users
 

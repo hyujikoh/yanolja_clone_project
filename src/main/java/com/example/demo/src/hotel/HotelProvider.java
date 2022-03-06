@@ -33,9 +33,9 @@ public class HotelProvider {
         try{
 
             System.out.println("1123");
-            List<GetHotelResConditoin> getHotelResConditoin1 = hotelDao.getHotels();
+            List<GetHotelResConditoin> getHotelResConditoin = hotelDao.getHotels();
 
-            return getHotelResConditoin1;
+            return getHotelResConditoin;
 
         }
         catch (Exception exception) {
