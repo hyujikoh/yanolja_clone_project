@@ -219,4 +219,92 @@ public class UserDao {
                         rs.getString("Posteddate")),
                 getUserReviewsParams);
     }
+
+
+
+    // 유저기준 장바구니 조회
+    public List<GetUserCartReq> getUserCarts(int userIdx) {
+        String getUserCartsQuery1 = "select Idx,\n" +
+                "       date_format(entranceTime,'%H : %i') entrance,\n" +
+                "       date_format(checkoutTime,'%H : %i') checktime,\n" +
+                "       imageUrl,\n" +
+                "       R1.hotelName ,\n" +
+                "       R1.hotelLocationDesc,\n" +
+                "       R2.roomType,\n" +
+                "       R2.roomName,\n" +
+                "       R2.allowedPeople,\n" +
+                "       R2.maxPeople,\n" +
+                "       R1.couponava,\n" +
+                "       R1.couponprices,\n" +
+                "       R2.reserveprice,\n" +
+                "       R2.stayprice_discount\n" +
+                "from Cart C\n" +
+                "         inner join (select hotelIdx I_hotelIdx, imageUrl  from HotelImage WHERE type = 1) I1\n" +
+                "                    on (I1.I_hotelIdx = C.hotelIdx)\n" +
+                "         inner join (select Idx                                                      호텔인덱스,\n" +
+                "                            hotelName                                                ,\n" +
+                "                            hotelLocationDesc                                        ,\n" +
+                "                            couponName,\n" +
+                "                            case when couponCount = 0 then '마감' else couponCount end couponava\n" +
+                "                             ,\n" +
+                "                            couponprices\n" +
+                "                     from Hotel\n" +
+                "                              left outer join (select Idx                                  쿠폰인덱스,\n" +
+                "                                                      hotelIdx,\n" +
+                "                                                      couponCount,\n" +
+                "                                                      couponName,\n" +
+                "                                                      case\n" +
+                "                                                          when disPercent is null then concat(min(disprice), '원')\n" +
+                "                                                          else concat(disPercent, '%') end couponprices\n" +
+                "                                               from coupon\n" +
+                "                                               group by hotelIdx) C1 on (Hotel.Idx = C1.hotelIdx)) R1\n" +
+                "                    on (R1.호텔인덱스 = C.hotelIdx)\n" +
+                "         inner join(select Idx                                             룸인덱스,\n" +
+                "                           roomType                                        ,\n" +
+                "                           roomName                                        ,\n" +
+                "                           allowedPeople                                   ,\n" +
+                "                           maxPeople                                       ,\n" +
+                "                           case when roomCount = 0 then '예약마감' else 가격 end reserveprice,\n" +
+                "                           stayprice_discount,\n" +
+                "                           case\n" +
+                "                               when dayuseCount = 0 then '예약마감'\n" +
+                "                               else 대실가격 end                               대실가,\n" +
+                "                           대실할인가격,\n" +
+                "                           entranceTime                                    숙박입실,\n" +
+                "                           대실입실\n" +
+                "\n" +
+                "                    from Room R0\n" +
+                "                             left outer join(select dayuseCount,\n" +
+                "                                                    dayuseStart 대실입실,\n" +
+                "                                                    dayuseCount 대실가능갯수,\n" +
+                "                                                    roomIdx     대실_방인덱스\n" +
+                "                                             from RoomDayuse) RD\n" +
+                "                                            on (RD.대실_방인덱스 = R0.Idx)\n" +
+                "                             inner join (select roomdx, 숙박가격 가격, 숙박할인가격 as stayprice_discount, 대실가격, 대실할인가격\n" +
+                "                                         from Price\n" +
+                "                                         where case\n" +
+                "                                                   when dayofweek(now()) = (6 or 7) then dayType = 2\n" +
+                "                                                   else dayType = 1 end\n" +
+                "                    ) R on (R.roomdx = R0.Idx)) R2\n" +
+                "                   on (R2.룸인덱스 = C.roomIdx)\n" +
+                "where userIdx = ?;";
+        int getUserCartsParams = userIdx;
+        return this.jdbcTemplate.query(getUserCartsQuery1,
+                (rs, rowNum) -> new GetUserCartReq(
+                        rs.getInt("Idx"),
+                        rs.getString("entrance"),
+                        rs.getString("checktime"),
+                        rs.getString("imageUrl"),
+                        rs.getString("hotelName"),
+                        rs.getString("hotelLocationDesc"),
+                        rs.getString("roomType"),
+                        rs.getString("roomName"),
+                        rs.getString("allowedPeople"),
+                        rs.getString("maxPeople"),
+                        rs.getString("couponava"),
+                        rs.getString("couponprices"),
+                        rs.getString("reserveprice"),
+                        rs.getInt("stayprice_discount")),
+                getUserCartsParams);
+    }
 }

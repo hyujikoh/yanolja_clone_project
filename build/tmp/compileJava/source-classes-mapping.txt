@@ -74,6 +74,8 @@ com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/user/model/GetUserCartReq.java
+ com.example.demo.src.user.model.GetUserCartReq
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/src/user/UserProvider.java

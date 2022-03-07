@@ -139,4 +139,20 @@ public class UserProvider {
 
 
     }
+
+    @Transactional
+    public List<GetUserCartReq> getUserCarts(int userIdx) throws BaseException{
+
+        try{
+
+            System.out.println("3");
+            List<GetUserCartReq> getUserCartReqs = userDao.getUserCarts(userIdx);
+            System.out.println("4");
+            return getUserCartReqs;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 }

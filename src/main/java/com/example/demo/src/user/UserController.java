@@ -314,7 +314,7 @@ public class UserController {
     //Query String
     @ResponseBody
     @GetMapping("/{userIdx}/reviews") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserReview>> HotelByReviews(@PathVariable("userIdx") int userIdx ) { //
+    public BaseResponse<List<GetUserReview>> UserByReviews(@PathVariable("userIdx") int userIdx ) { //
         try{
 
             List<GetUserReview> getUserReviews = userProvider.getUserReview(userIdx); // 검색조회
@@ -350,5 +350,21 @@ public class UserController {
 //        }
 //    }
 
+    /** ^^^^^^내가 만든 코드 ^^^^^^^
+     유저기준 장바구니 조회
+     * @return BaseResponse<List<GetUserRes>> 이것도 수정
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("/{userIdx}/carts") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetUserCartReq>> UserByCarts(@PathVariable("userIdx") int userIdx ) { //
+        try{
 
+            List<GetUserCartReq> getUserCartReqs = userProvider.getUserCarts(userIdx); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(getUserCartReqs);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
