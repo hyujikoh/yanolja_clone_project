@@ -82,32 +82,33 @@ public class HotelProvider {
         }
     }
 
-//    public int checkEmail(String userEmail) throws BaseException{
-//        try{
-//            return hotelDao.checkEmail(userEmail);
-//        } catch (Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
-//        User user = hotelDao.getPwd(postLoginReq);
-//        String encryptPwd;
-//        try {
-//            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
-//        } catch (Exception ignored) {
-//            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
-//        }
-//
-//        if(user.getUserPwd().equals(encryptPwd)){
-//            int userIdx = user.getIdx();
-//            String jwt = jwtService.createJwt(userIdx);
-//            return new PostLoginRes(userIdx,jwt);
-//        }
-//        else{
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
-//
-//    }
+    public List<GetHotelResConditoin12> getHotelByhotelType(String hotelType) throws BaseException{
+        try{
 
+            System.out.println("3");
+            List<GetHotelResConditoin12> getHotelResConditoin12s = hotelDao.HotelByhotelType(hotelType);
+            System.out.println("4");
+            return getHotelResConditoin12s;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
+    public List<GetHotelReview> getHotelReview(int hotelIdx) throws BaseException{
+
+        try{
+
+            System.out.println("3");
+            List<GetHotelReview> getHotelReviews = hotelDao.getHotelReviews(hotelIdx);
+            System.out.println("4");
+            return getHotelReviews;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 }

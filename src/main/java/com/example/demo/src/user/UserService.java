@@ -85,7 +85,7 @@ public class UserService {
         }
     }
 
-    /* 오현직이 추가한 핸드폰번호 번경하는 서비스 처리기기*/
+    /* 오현직이 추가한 닉네임 번경하는 서비스 처리기기*/
     public void modifyUserNickname(PatchUserNicknameReq patchUserNicknameReq) throws BaseException {
         try{
             System.out.println("service 닉네임");

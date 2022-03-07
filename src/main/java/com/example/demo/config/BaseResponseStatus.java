@@ -52,8 +52,7 @@ public enum BaseResponseStatus {
      */
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
-
-    //[PATCH] /users/{userIdx}
+    SEARCH_ERROR_HOTELTYPE(false, 4003, "호텔 타입을 입력하지 않았습니다."),// 내가 만듬 03/07
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
     MODIFY_FAIL_USERNICKNAME(false,4015,"유저네임 수정 실패"), // 내가만듬!
     MODIFY_FAIL_USEREMAIL(false,4016,"유저이메일 수정 실패"), // 내가만듬!

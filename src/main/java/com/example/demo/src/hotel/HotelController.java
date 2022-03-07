@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.SEARCH_ERROR_HOTELTYPE;
+
 @RestController
 @RequestMapping("/app/hotels")
 public class HotelController {
@@ -35,13 +38,7 @@ public class HotelController {
         this.jwtService = jwtService;
     }
 
-    /** ^^^^^^전 코드^^^^^^
-     * 회원 조회 API
-     * [GET] /users
-     * 회원 번호 및 이메일 검색 조회 API
-     * [GET] /users? Email=
-     * @return BaseResponse<List<GetUserRes>>
-     */
+
     /** ^^^^^^내가 만든 코드 ^^^^^^^
      * 호텔조회 API
      * [GET] /hotels
@@ -70,11 +67,28 @@ public class HotelController {
         }
     }
 
-    /**
-     * 회원 1명 조회 API
-     * [GET] /users/:userIdx
-     * @return BaseResponse<GetUserRes>
+    /** ^^^^^^내가 만든 코드 ^^^^^^^
+     * 호텔조회 API
+     * [GET] /hotels
+     * 호텔 번호 출력 API
+     * [GET] /hotel?hotleName=
+     * @return BaseResponse<List<GetUserRes>> 이것도 수정
      */
+    //Query String
+    @ResponseBody
+    @GetMapping("/hotelType") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetHotelResConditoin12>> HotelByhotelType(@RequestParam(required = false) String hotelType) { //
+        try{
+
+            List<GetHotelResConditoin12> getHotelByhotelType = hotelProvider.getHotelByhotelType(hotelType); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(getHotelByhotelType);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
     /**
      * 호텔 1개 조회 API 내가 수정한 코드!!!!!!!!!
      * [GET] /app/hotels
@@ -122,190 +136,29 @@ public class HotelController {
 
     }
 
-//    /**
-//     * 회원가입 API
-//     * [POST] /users
-//     * @return BaseResponse<PostUserRes>
-//     */
-//    // Body
-//    @ResponseBody
-//    @PostMapping("/sign-in")
-//    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-//        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-//        System.out.println("CCC1");
-//        if(postUserReq.getUserEmail() == null){
-//            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-//        }
-//        //이메일 정규표현
-//        if(!isRegexEmail(postUserReq.getUserEmail())){
-//            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-//        }
-//
-//        // 전화번호 정규 표현 내가함!
-//        if(!isRegexPhone(postUserReq.getUserPhone())){
-//
-//            return new BaseResponse<>(POST_USERS_INVALID_PHONE);
-//        }
-//        //아이디 정규식 내가함!
-//        if(!isRegexUserName(postUserReq.getUserName())){
-//            return new BaseResponse<>(POST_USERS_INVALID_USERNAME);
-//        }
-//        if(!isRegexPassword(postUserReq.getUserPwd())){
-//            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
-//        }
-//        try{
-//            System.out.println("CCC2");
-//            PostUserRes postUserRes = hotelService.createUser(postUserReq);
-//            System.out.println("1");
-//            return new BaseResponse<>(postUserRes);
-//        } catch(BaseException exception){
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//
-//    }
-//    /**
-//     * 로그인 API
-//     * [POST] /users/logIn
-//     * @return BaseResponse<PostLoginRes>
-//     */
-//    @ResponseBody
-//    @PostMapping("/logIn")
-//    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
-//        try{
-//            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
-//            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-//            PostLoginRes postLoginRes = hotelProvider.logIn(postLoginReq);
-//            return new BaseResponse<>(postLoginRes);
-//        } catch (BaseException exception){
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
-//
-//    /**
-//     * 유저정보변경 API
-//     * [PATCH] /users/:userIdx
-//     * @return BaseResponse<String>
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{userIdx}")
-//    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
-//        try {
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저네임 변경
-//            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getUserName());
-//            userService.modifyUserName(patchUserReq);
-//
-//            String result = "";
-//        return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-//
-//    /**
-//     * 1. 유저정보변경 API 핸드폰 번호 변경!!! 오현직 메이드
-//     * [PATCH] /users/:userIdx
-//     * @return BaseResponse<String>
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{Idx}/phone")
-//    public BaseResponse<String> modifyUserPhone(@PathVariable("Idx") int Idx, @RequestBody User user){
-//        System.out.println("00");
-//
-//        try {
-//            //jwt에서 idx 추출.
-//            System.out.println("시전");
-////            int userIdxByJwt = jwtService.getUserIdx();
-////            //userIdx와 접근한 유저가 같은지 확인
-////            System.out.println(userIdxByJwt);
-////            if(userIdx != userIdxByJwt){
-////                return new BaseResponse<>(INVALID_USER_JWT);
-////            }
-//            //같다면 유저네임 변경
-//            PatchUserReq_userPhone patchUserReq_userPhone = new PatchUserReq_userPhone(Idx,user.getUserPhone());
-//            userService.modifyUserPhone(patchUserReq_userPhone);
-//
-//            String result = "";
-//            System.out.println("phone1");
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            System.out.println("컨트럴러 캐치 에러나옴 ");
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-//
-//    /**
-//     * 2. 유저정보변경 API 닉네임 변경!!! 오현직 메이드
-//     * [PATCH] /users/:userIdx
-//     * @return BaseResponse<String>
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{Idx}/nickname")
-//    public BaseResponse<String> modifyUserNickname(@PathVariable("Idx") int Idx, @RequestBody User user){
-//        System.out.println("00");
-//
-//        try {
-//
-//            PatchUserNicknameReq patchUserNicknameReq = new PatchUserNicknameReq(Idx,user.getUserNickname());
-//            userService.modifyUserNickname(patchUserNicknameReq);
-//
-//            String result = "";
-//            System.out.println("phone1");
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            System.out.println("컨트럴러 캐치 에러나옴 ");
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-//
-//    /**
-//     * 3. 유저정보변경 API 이메일 변경!!! 오현직 메이드
-//     * [PATCH] /users/:userIdx
-//     * @return BaseResponse<String>
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{Idx}/email")
-//    public BaseResponse<String> modifyUserEmail(@PathVariable("Idx") int Idx, @RequestBody User user){
-//        System.out.println("00");
-//        try {
-//            PatchUserEmailReq patchUserEmailReq = new PatchUserEmailReq(Idx,user.getUserEmail());
-//            userService.modifyUserEmail(patchUserEmailReq);
-//            String result = "";
-//            System.out.println("email1");
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            System.out.println("컨트럴러 캐치 에러나옴 ");
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-//
-//
-//
-//    /**
-//     * 4. 유저탈퇴(status ACTIVATE  -> INACTIVATE 로 상태 변경) 오현직 메이드
-//     * [PATCH] /users/:userIdx
-//     * @return BaseResponse<String>
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{Idx}/status")
-//    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody User user){
-//        System.out.println("00");
-//        try {
-//            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(Idx,user.getUserPwd());
-//            userService.modifyUserStatus(patchUserStatusReq);
-//            String result = "";
-//            System.out.println("상태11");
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            System.out.println("컨트럴러 캐치 에러나옴 ");
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+
+
+    /** ^^^^^^내가 만든 코드 ^^^^^^^
+     * 호텔조회 API
+     * [GET] /hotels
+     * 호텔 번호 출력 API
+     * [GET] /hotel?hotleName=
+     * @return BaseResponse<List<GetUserRes>> 이것도 수정
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("/{hotelIdx}/reviews") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetHotelReview>> HotelByReviews(@PathVariable("hotelIdx") int hotelIdx ) { //
+        try{
+
+            List<GetHotelReview> getHotelReviews = hotelProvider.getHotelReview(hotelIdx); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(getHotelReviews);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 
 }
