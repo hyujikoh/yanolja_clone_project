@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.hotel.model.GetHotelReview;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,29 +37,29 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    /**
-     * 회원 조회 API
-     * [GET] /users
-     * 회원 번호 및 이메일 검색 조회 API
-     * [GET] /users? Email=
-     * @return BaseResponse<List<GetUserRes>>
-     */
-    //Query String
-    @ResponseBody
-    @GetMapping("") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
-        try{
-            if(Email == null){
-                List<GetUserRes> getUsersRes = userProvider.getUsers();
-                return new BaseResponse<>(getUsersRes);
-            }
-            // Get Users
-            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
+//    /** 현재 야놀자에서는 구현 안하는 내용
+//     * 회원 조회 API
+//     * [GET] /users
+//     * 회원 번호 및 이메일 검색 조회 API
+//     * [GET] /users? Email=
+//     * @return BaseResponse<List<GetUserRes>>
+//     */
+//    //Query String
+//    @ResponseBody
+//    @GetMapping("") // (GET) 127.0.0.1:9000/app/users
+//    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
+//        try{
+//            if(Email == null){
+//                List<GetUserRes> getUsersRes = userProvider.getUsers();
+//                return new BaseResponse<>(getUsersRes);
+//            }
+//            // Get Users
+//            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
+//            return new BaseResponse<>(getUsersRes);
+//        } catch(BaseException exception){
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 
     /**
      * 회원 1명 조회 API
@@ -121,23 +122,51 @@ public class UserController {
         }
 
     }
+
+
+
+
+
+    /**
+     * 이메일 로그인 API
+     * [POST] /users/logIn/email
+     * @return BaseResponse<PostLoginRes>
+     */
+    @ResponseBody
+    @PostMapping("/logIn/email")
+    public BaseResponse<PostLoginRes> logInemail(@RequestBody PostLoginReq postLoginReq){
+        try{
+            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
+            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+            System.out.println("이메일 로그인 시작");
+            PostLoginRes postLoginRes = userProvider.logIn_email(postLoginReq);
+            System.out.println("이메일 로그인 끝");
+            return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
     /**
      * 로그인 API
      * [POST] /users/logIn
      * @return BaseResponse<PostLoginRes>
      */
     @ResponseBody
-    @PostMapping("/logIn")
-    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
+    @PostMapping("/logIn/phone")
+    public BaseResponse<PostLoginRes> logIn_phone(@RequestBody PostLoginReq postLoginReq){
         try{
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-            PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
+            PostLoginRes postLoginRes = userProvider.logIn_email(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+
 
     /**
      * 유저정보변경 API
@@ -241,6 +270,26 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /** ^^^^^^내가 만든 코드 ^^^^^^^
+     호텔기준 리뷰 조회
+     * @return BaseResponse<List<GetUserRes>> 이것도 수정
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("/{userIdx}/reviews") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetUserReview>> HotelByReviews(@PathVariable("userIdx") int userIdx ) { //
+        try{
+
+            List<GetUserReview> getUserReviews = userProvider.getUserReview(userIdx); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(getUserReviews);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
 
 
 

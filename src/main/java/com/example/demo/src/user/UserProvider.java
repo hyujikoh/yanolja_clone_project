@@ -3,6 +3,7 @@ package com.example.demo.src.user;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.hotel.model.GetHotelReview;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -71,11 +73,15 @@ public class UserProvider {
         }
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
+
+    @Transactional
+    public PostLoginRes logIn_email(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd(postLoginReq);
         String encryptPwd;
         try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
+            System.out.println("이메일 로그인 2");
+            encryptPwd=new SHA256().encrypt(postLoginReq.getUserPwd());
+            System.out.println("이메일 로그인 3");
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
@@ -87,6 +93,22 @@ public class UserProvider {
         }
         else{
             throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+    }
+
+    @Transactional
+    public List<GetUserReview> getUserReview(int userIdx) throws BaseException{
+
+        try{
+
+            System.out.println("3");
+            List<GetUserReview> getUserReviews = userDao.getUserReviews(userIdx);
+            System.out.println("4");
+            return getUserReviews;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
 
     }

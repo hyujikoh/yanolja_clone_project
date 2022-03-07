@@ -20,7 +20,6 @@ public class GetUserRes {
     @Id
     @Column(name="Idx")
     private int userIdx;
-
     private String userName;
     private String userPwd;
     private String userNickname;

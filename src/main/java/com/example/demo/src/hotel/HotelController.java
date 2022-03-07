@@ -139,10 +139,7 @@ public class HotelController {
 
 
     /** ^^^^^^내가 만든 코드 ^^^^^^^
-     * 호텔조회 API
-     * [GET] /hotels
-     * 호텔 번호 출력 API
-     * [GET] /hotel?hotleName=
+    호텔기준 리뷰 조회
      * @return BaseResponse<List<GetUserRes>> 이것도 수정
      */
     //Query String

@@ -1,6 +1,7 @@
 package com.example.demo.src.user;
 
 
+import com.example.demo.src.hotel.model.GetHotelReview;
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -88,13 +89,15 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams);
     }
-// 내가 만듬 패치 1 !
+
+    // 내가 만듬 패치 1 !
     public int modifyUserPhone(PatchUserReq_userPhone patchUserReq_userPhone) {
         String modifyUserPhoneQuery = "update User set userPhone = ? where Idx = ? ";
         Object[] modifyUserPhoneParams = new Object[]{patchUserReq_userPhone.getUserPhone(), patchUserReq_userPhone.getIdx()};
 
         return this.jdbcTemplate.update(modifyUserPhoneQuery, modifyUserPhoneParams);
     }
+
     //내가 만든 패치 2 !
     public int modifyUserNickname(PatchUserNicknameReq patchUserNicknameReq) {
         String modifyUserNicknameQuery = "update User set userNickname = ? where Idx = ? ";
@@ -102,6 +105,7 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserNicknameQuery, modifyUserNicknameParams);
     }
+
     //내가 만든 패치 2 !
     public int modifyUserEmail(PatchUserEmailReq patchUserEmailReq) {
         String modifyUserEmailQuery = "update User set userEmail = ? where Idx = ? ";
@@ -119,20 +123,19 @@ public class UserDao {
 //    }
 
 
-
     public User getPwd(PostLoginReq postLoginReq) {
-        String getPwdQuery = "select userIdx, password,email,userName,ID from UserInfo where ID = ?";
-        String getPwdParams = postLoginReq.getId();
+        String getPwdQuery = "select Idx, userName,userPhone, userEmail, userNickname, userPwd,status from User where userEmail = ?";
+        String getPwdParams = postLoginReq.getUserEmail();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new User(
-                        rs.getInt("userIdx"),
+                        rs.getInt("Idx"),
                         rs.getString("userName"),
-                        rs.getString("userPwd"),
-                        rs.getString("userEmail"),
                         rs.getString("userPhone"),
+                        rs.getString("userEmail"),
+                        rs.getString("status"),
                         rs.getString("userNickname"),
-                        rs.getString("status")
+                        rs.getString("userPwd")
                 ),
                 getPwdParams
         );
@@ -140,4 +143,42 @@ public class UserDao {
     }
 
 
+    public List<GetUserReview> getUserReviews(int userIdx) {
+        String getUserReviewsQuery1 =
+                "select review.idx                                    ,\n" +
+                        "       review.reviewRate                             ,\n" +
+                        "       review.reviewText                             ,\n" +
+                        "       R1.reserveidx,\n" +
+                        "       R1.roomIdx ,\n" +
+                        "       R1.hotelnames,\n" +
+                        "       R1.roomType,\n" +
+                        "       R1.roomDesc,\n" +
+                        "       case when useType = 1 then '숙박' else '대실' end Type,\n" +
+                        "       RI.reviewImageUrl\n" +
+                        "from Review review\n" +
+                        "         left outer join(select reviewIdx, reviewImageUrl  from ReviewImage) RI on (RI.reviewIdx = review.Idx)\n" +
+                        "         inner join (select reserve.idx reserveidx , R2.roomIdx, R2.hotelnames , R2.방타입 roomType, R2.방상세 roomDesc, useType\n" +
+                        "                     from Reserve reserve\n" +
+                        "                              inner join (Select room.Idx roomIdx, room.hotelIdx, hotel.hotelName hotelnames, room.roomType 방타입, room.roomName 방상세\n" +
+                        "                                          from Room room\n" +
+                        "                                                   inner join(select H.hotelName , H.idx from Hotel H) hotel\n" +
+                        "                                                             on (hotel.idx = room.hotelIdx)) R2\n" +
+                        "                                         on (reserve.roomIdx = R2.roomIdx)\n" +
+                        "                     where progress = 2) R1 on (review.reserveIdx = R1.reserveidx)\n" +
+                        "where review.userIdx = ?;";
+        int getUserReviewsParams = userIdx;
+        return this.jdbcTemplate.query(getUserReviewsQuery1,
+                (rs, rowNum) -> new GetUserReview(
+                        rs.getInt("Idx"),
+                        rs.getInt("reviewRate"),
+                        rs.getString("reviewText"),
+                        rs.getInt("reserveidx"),
+                        rs.getInt("roomIdx"),
+                        rs.getString("hotelnames"),
+                        rs.getString("roomType"),
+                        rs.getString("roomDesc"),
+                        rs.getString("Type"),
+                        rs.getString("reviewImageUrl")),
+                getUserReviewsParams);
+    }
 }
