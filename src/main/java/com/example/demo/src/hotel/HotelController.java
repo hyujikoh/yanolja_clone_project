@@ -68,7 +68,7 @@ public class HotelController {
      * 호텔조회 API
      * [GET] /hotels
      * 호텔 번호 출력 API
-     * [GET] /hotel?hotleName=
+     * [GET] /hotel=
      * @return BaseResponse<List<GetUserRes>> 이것도 수정
      */
     //Query String

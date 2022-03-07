@@ -30,7 +30,7 @@ public class ValidationRegex {
         return matcher.find();
     }
     public static boolean isRegexReviewLength(String target){
-        String regex = "/^[.]{5,20}$/"; //5~200
+        String regex = "^[A-Za-z0-9!@#$%]{5,200}$"; //5~200
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(target);
         return matcher.find();

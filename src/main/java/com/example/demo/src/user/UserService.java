@@ -128,14 +128,34 @@ public class UserService {
 
     /* 오현직이 추가한 회원상태 번경하는 서비스 처리기기*/
 //    public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
-//        try{
-//            System.out.println("service 유저상태");
-//            int result = userDao.modifyUserStatus(patchUserStatusReq);
-//            if(result == 0){
-//                throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
-//            }
-//        } catch(Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
+////        try{
+////            System.out.println("service 유저상태");
+////            int result = userDao.modifyUserStatus(patchUserStatusReq);
+////            if(result == 0){
+////                throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
+////            }
+////        } catch(Exception exception){
+////            throw new BaseException(DATABASE_ERROR);
+////        }
+//        User user = userDao.modifyUserStatus(patchUserStatusReq);
+//        String password;
+//        try {
+//            //암호화
+//            password= new SHA256().encrypt(patchUserStatusReq.getUserPwd());
+//            System.out.println("pwd:"+password);
+//            patchUserStatusReq.setUserPwd(password);
+//        } catch (Exception ignored) {
+//            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+//        }
+//
+//        if(user.getUserPwd().equals(password)){
+//            int userIdx = user.getIdx();
+//            String jwt = jwtService.createJwt(userIdx);
+//            System.out.println("jwt:" + jwt);
+//            return new PostLoginRes(userIdx,jwt);
+//        }
+//        else{
+//            throw new BaseException(FAILED_TO_LOGIN);
 //        }
 //    }
 }

@@ -118,14 +118,14 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserEmailQuery, modifyUserEmailParams);
     }
 
-    //내가 만든 패치 3 !
+//    //내가 만든 패치 3 !
 //    public int modifyUserStatus(PatchUserStatusReq patchUserStatusReq) {
 //        String modifyUserStatusQuery = "update User set status = 'INACTIVATE' where Idx = ? ";
 //        Object[] modifyUserStatusParams = new Object[]{patchUserStatusReq.getIdx()};
 //
 //        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
 //    }
-//    내가 만든 패치 3 !
+    //내가 만든 패치 3 !
     public int modifyReviewText(PatchUserReviewReq patchUserReviewReq)   {
         System.out.println("리뷰수정");
         String modifyReviewTextQuery = "update Review set reviewText = ? where userIdx = ? and Idx = ? ;"; // and 연산자 사용시 우선순위는 맨뒤에 있다.
