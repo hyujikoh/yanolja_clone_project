@@ -1,6 +1,7 @@
 package com.example.demo.src.user;
 
 import com.example.demo.src.hotel.model.GetHotelReview;
+import com.example.demo.utils.SHA256;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,6 +139,18 @@ public class UserController {
         try{
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+//            String encryptPwd;
+//            encryptPwd=new SHA256().encrypt(postLoginReq.getUserPwd());
+//
+//            if(postLoginReq.getUserPwd().equals(encryptPwd)){
+//                int userIdx = postLoginReq.getIdx();
+//                String jwt = jwtService.createJwt(userIdx);
+//                return new PostLoginRes(userIdx,jwt);
+//            }
+//            else{
+//                throw new BaseException(FAILED_TO_LOGIN);
+//            }
+
             System.out.println("이메일 로그인 시작");
             PostLoginRes postLoginRes = userProvider.logIn_email(postLoginReq);
             System.out.println("이메일 로그인 끝");
@@ -154,11 +167,11 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/logIn/phone")
-    public BaseResponse<PostLoginRes> logIn_phone(@RequestBody PostLoginReq postLoginReq){
+    public BaseResponse<PostLoginRes> logInphone(@RequestBody PostLoginPhoneReq postLoginPhoneReq){
         try{
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-            PostLoginRes postLoginRes = userProvider.logIn_email(postLoginReq);
+            PostLoginRes postLoginRes = userProvider.logIn_phone(postLoginPhoneReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -271,8 +284,31 @@ public class UserController {
         }
     }
 
+/* 리뷰 수정 */
+    @ResponseBody
+    @PatchMapping("/{userIdx}/review")
+    public BaseResponse<String> modifyUserReviewText(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserReviewReq user){
+        System.out.println("00");
+        if(!isRegexReviewLength(user.getReviewText())){
+            return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
+        }
+
+        try {
+            PatchUserReviewReq patchUserReviewReq = new PatchUserReviewReq(userIdx, user.getReviewText(), user.getIdx());
+            userService.modifyReviewText(patchUserReviewReq);
+            String result = "";
+            System.out.println("email1");
+
+
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            System.out.println("컨트럴러 캐치 에러나옴 ");
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     /** ^^^^^^내가 만든 코드 ^^^^^^^
-     호텔기준 리뷰 조회
+     유저기준 리뷰 조회
      * @return BaseResponse<List<GetUserRes>> 이것도 수정
      */
     //Query String

@@ -1,6 +1,7 @@
 package com.example.demo.src.user;
 
 
+import com.example.demo.config.BaseResponse;
 import com.example.demo.src.hotel.model.GetHotelReview;
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.POST_REVIEW_INVALID_TEXTLENGTH;
+import static com.example.demo.utils.ValidationRegex.isRegexReviewLength;
 
 @Repository
 public class UserDao {
@@ -121,27 +125,56 @@ public class UserDao {
 //
 //        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
 //    }
+//    내가 만든 패치 3 !
+    public int modifyReviewText(PatchUserReviewReq patchUserReviewReq)   {
+        System.out.println("리뷰수정");
+        String modifyReviewTextQuery = "update Review set reviewText = ? where userIdx = ? and Idx = ? ;"; // and 연산자 사용시 우선순위는 맨뒤에 있다.
+        Object[] modifyReviewTextParams = new Object[]{patchUserReviewReq.getReviewText(), patchUserReviewReq.getIdx(),patchUserReviewReq.getUserIdx()};
 
-
-    public User getPwd(PostLoginReq postLoginReq) {
-        String getPwdQuery = "select Idx, userName,userPhone, userEmail, userNickname, userPwd,status from User where userEmail = ?";
+        return this.jdbcTemplate.update(modifyReviewTextQuery, modifyReviewTextParams);
+    }
+// 이메일 기준 패스워드 조회
+    public User getPwd_email(PostLoginReq postLoginReq) {
+        String getPwdQuery = "select Idx, userName,userPwd, userEmail,  userPhone,userNickname ,status from User where userEmail = ?";
         String getPwdParams = postLoginReq.getUserEmail();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new User(
                         rs.getInt("Idx"),
                         rs.getString("userName"),
-                        rs.getString("userPhone"),
+                        rs.getString("userPwd"),
                         rs.getString("userEmail"),
-                        rs.getString("status"),
+                        rs.getString("userPhone"),
                         rs.getString("userNickname"),
-                        rs.getString("userPwd")
+                        rs.getString("status")
                 ),
                 getPwdParams
         );
 
     }
 
+
+
+    public User getPwd_phone(PostLoginPhoneReq postLoginPhoneReq) {
+        String getPwdQuery = "select Idx, userName,userPwd, userEmail,  userPhone,userNickname ,status from User where userPhone = ?";
+        String getPwdParams = postLoginPhoneReq.getUserPhone();
+
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("Idx"),
+                        rs.getString("userName"),
+                        rs.getString("userPwd"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPhone"),
+                        rs.getString("userNickname"),
+                        rs.getString("status")
+                ),
+                getPwdParams
+        );
+
+    }
+
+/*특정 유저 기준 리뷰*/
 
     public List<GetUserReview> getUserReviews(int userIdx) {
         String getUserReviewsQuery1 =

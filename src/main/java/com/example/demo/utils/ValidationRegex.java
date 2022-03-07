@@ -29,6 +29,12 @@ public class ValidationRegex {
         Matcher matcher = pattern.matcher(target);
         return matcher.find();
     }
+    public static boolean isRegexReviewLength(String target){
+        String regex = "/^[.]{5,20}$/"; //5~200
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
 
 }
 

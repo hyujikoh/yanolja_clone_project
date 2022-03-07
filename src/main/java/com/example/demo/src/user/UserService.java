@@ -3,6 +3,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
@@ -42,8 +43,9 @@ public class UserService {
         String pwd;
         try{
             //암호화
-            pwd = new SHA256().encrypt(postUserReq.getUserPwd());
-            postUserReq.setUserPwd(pwd);
+//            pwd = new SHA256(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getUserPwd());
+//            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
+//            postUserReq.setUserPwd(pwd);
 
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
@@ -109,6 +111,21 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+// 리뷰 텍스트 변경하기
+    public void modifyReviewText(PatchUserReviewReq patchUserReviewReq) throws BaseException {
+        try{
+            System.out.println("service 리뷰변경");
+            int result = userDao.modifyReviewText(patchUserReviewReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USEREMAIL);
+            }
+
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     /* 오현직이 추가한 회원상태 번경하는 서비스 처리기기*/
 //    public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
 //        try{

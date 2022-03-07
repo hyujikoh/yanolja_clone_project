@@ -2,8 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponseStatus;
-import com.example.demo.src.hotel.model.GetHotelReview;
+import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
@@ -76,24 +75,27 @@ public class UserProvider {
 
     @Transactional
     public PostLoginRes logIn_email(PostLoginReq postLoginReq) throws BaseException{
-        User user = userDao.getPwd(postLoginReq);
-        String encryptPwd;
+        User user = userDao.getPwd_email(postLoginReq);
+        String password;
         try {
-            System.out.println("이메일 로그인 2");
-            encryptPwd=new SHA256().encrypt(postLoginReq.getUserPwd());
-            System.out.println("이메일 로그인 3");
+            //암호화
+            password= new SHA256().encrypt(postLoginReq.getUserPwd());
+            System.out.println("pwd:"+password);
+            postLoginReq.setUserPwd(password);
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if(user.getUserPwd().equals(encryptPwd)){
+        if(user.getUserPwd().equals(password)){
             int userIdx = user.getIdx();
             String jwt = jwtService.createJwt(userIdx);
+            System.out.println("jwt:" + jwt);
             return new PostLoginRes(userIdx,jwt);
         }
         else{
             throw new BaseException(FAILED_TO_LOGIN);
         }
+
 
     }
 
@@ -113,4 +115,28 @@ public class UserProvider {
 
     }
 
+    public PostLoginRes logIn_phone(PostLoginPhoneReq postLoginPhoneReq) throws BaseException{
+        User user = userDao.getPwd_phone(postLoginPhoneReq);
+        String password;
+        try {
+            //암호화
+            password= new SHA256().encrypt(postLoginPhoneReq.getUserPwd());
+            System.out.println("pwd:"+password);
+            postLoginPhoneReq.setUserPwd(password);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
+
+        if(user.getUserPwd().equals(password)){
+            int userIdx = user.getIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            System.out.println("jwt:" + jwt);
+            return new PostLoginRes(userIdx,jwt);
+        }
+        else{
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+
+    }
 }

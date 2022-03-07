@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 
-public class GetHotelResConditoin12 {
+public class GetHotelResConditoinType {
     private int Idx;
     private String hotelName;
     private String hotelLocation;

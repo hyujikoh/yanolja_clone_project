@@ -1,4 +1,4 @@
 package com.example.demo.src.user.model;
 
-public class PatchUserReview {
+public class GetUserCartReq {
 }

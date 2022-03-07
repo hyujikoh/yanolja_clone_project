@@ -284,7 +284,7 @@ public class HotelDao {
 
     }
 
-    public List<GetHotelResConditoin12> HotelByhotelType(String hotelType) {
+    public List<GetHotelResConditoinType> HotelByhotelType(String hotelType) {
         String getHotelByhotelNameQuery1 =
                 "select H.Idx,\n" +
                         "       H.hotelName  ,\n" +
@@ -327,7 +327,7 @@ public class HotelDao {
         String getHotelByhotelTypeParams = hotelType;
         System.out.println("다오에러");
         return this.jdbcTemplate.query(getHotelByhotelNameQuery1,
-                (rs, rowNum) -> new GetHotelResConditoin12(
+                (rs, rowNum) -> new GetHotelResConditoinType(
                         rs.getInt("Idx"),
                         rs.getString("hotelName"),
                         rs.getString("hotelLocation"),

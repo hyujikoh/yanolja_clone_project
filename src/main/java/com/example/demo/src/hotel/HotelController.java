@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.SEARCH_ERROR_HOTELTYPE;
-
 @RestController
 @RequestMapping("/app/hotels")
 public class HotelController {
@@ -77,10 +74,10 @@ public class HotelController {
     //Query String
     @ResponseBody
     @GetMapping("/hotelType") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetHotelResConditoin12>> HotelByhotelType(@RequestParam(required = false) String hotelType) { //
+    public BaseResponse<List<GetHotelResConditoinType>> HotelByhotelType(@RequestParam(required = false) String hotelType) { //
         try{
 
-            List<GetHotelResConditoin12> getHotelByhotelType = hotelProvider.getHotelByhotelType(hotelType); // 검색조회
+            List<GetHotelResConditoinType> getHotelByhotelType = hotelProvider.getHotelByhotelType(hotelType); // 검색조회
             System.out.println("2");
             return new BaseResponse<>(getHotelByhotelType);
         } catch(BaseException exception){

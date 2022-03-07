@@ -82,11 +82,11 @@ public class HotelProvider {
         }
     }
 
-    public List<GetHotelResConditoin12> getHotelByhotelType(String hotelType) throws BaseException{
+    public List<GetHotelResConditoinType> getHotelByhotelType(String hotelType) throws BaseException{
         try{
 
             System.out.println("3");
-            List<GetHotelResConditoin12> getHotelResConditoin12s = hotelDao.HotelByhotelType(hotelType);
+            List<GetHotelResConditoinType> getHotelResConditoin12s = hotelDao.HotelByhotelType(hotelType);
             System.out.println("4");
             return getHotelResConditoin12s;
         }
