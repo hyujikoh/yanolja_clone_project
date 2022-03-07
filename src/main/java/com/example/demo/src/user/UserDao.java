@@ -145,7 +145,7 @@ public class UserDao {
 
     public List<GetUserReview> getUserReviews(int userIdx) {
         String getUserReviewsQuery1 =
-                "select review.idx                                    ,\n" +
+                "select review.idx  reviewIdx                               ,\n" +
                         "       review.reviewRate                             ,\n" +
                         "       review.reviewText                             ,\n" +
                         "       R1.reserveidx,\n" +
@@ -154,7 +154,11 @@ public class UserDao {
                         "       R1.roomType,\n" +
                         "       R1.roomDesc,\n" +
                         "       case when useType = 1 then '숙박' else '대실' end Type,\n" +
-                        "       RI.reviewImageUrl\n" +
+                        "       RI.reviewImageUrl,\n" +
+                        "       case\n" +
+                        "           when 24 >= timestampdiff(HOUR, updateAt, current_timestamp)\n" +
+                        "               then concat(timestampdiff(HOUR, updateAt, current_timestamp), '시간 전')\n" +
+                        "           else concat(timestampdiff(DAY, updateAt, current_timestamp), '일 전') end Posteddate\n" +
                         "from Review review\n" +
                         "         left outer join(select reviewIdx, reviewImageUrl  from ReviewImage) RI on (RI.reviewIdx = review.Idx)\n" +
                         "         inner join (select reserve.idx reserveidx , R2.roomIdx, R2.hotelnames , R2.방타입 roomType, R2.방상세 roomDesc, useType\n" +
@@ -169,7 +173,7 @@ public class UserDao {
         int getUserReviewsParams = userIdx;
         return this.jdbcTemplate.query(getUserReviewsQuery1,
                 (rs, rowNum) -> new GetUserReview(
-                        rs.getInt("Idx"),
+                        rs.getInt("reviewIdx"),
                         rs.getInt("reviewRate"),
                         rs.getString("reviewText"),
                         rs.getInt("reserveidx"),
@@ -178,7 +182,8 @@ public class UserDao {
                         rs.getString("roomType"),
                         rs.getString("roomDesc"),
                         rs.getString("Type"),
-                        rs.getString("reviewImageUrl")),
+                        rs.getString("reviewImageUrl"),
+                        rs.getString("Posteddate")),
                 getUserReviewsParams);
     }
 }

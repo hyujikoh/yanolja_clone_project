@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @AllArgsConstructor
 public class GetUserReview {
-    private int Idx;
+    private int reviewIdx;
     private int reviewRate;
     private String reviewText;
     private int reserveidx;
@@ -25,4 +25,5 @@ public class GetUserReview {
     private String roomDesc;
     private String Type;
     private String reviewImageUrl;
+    private String Posteddate;
 }
