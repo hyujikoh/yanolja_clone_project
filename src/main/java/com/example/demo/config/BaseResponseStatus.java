@@ -13,6 +13,7 @@ public enum BaseResponseStatus {
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
     DELETE_SUCCESS(true, 1001, "컬럼을 삭제를 성공하였습니다."),
     USER_DELETE_SUCCESS(true, 1002, "회원탈퇴 성공"),
+    SUCCESS_CHANGE_USER_PWD(true, 1003, "패스워드변경 성공"),
     /**
      * 2000 : Request 오류
      */

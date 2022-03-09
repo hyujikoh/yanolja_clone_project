@@ -169,18 +169,19 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
     }
-    public PatchUserStatusReq getPwd_idx(PatchUserStatusReq patchUserStatusReq) {
-        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
-        int PatchUserStatusParams = patchUserStatusReq.getIdx();
 
-        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
-                (rs, rowNum) -> new PatchUserStatusReq(
-                        rs.getInt("Idx"),
-                        rs.getString("userPwd")
-                ),
-                PatchUserStatusParams
-        );
-    }
+//    public PatchUserStatusReq changePwd_idx(PatchUserPwd patchUserPwd) {
+//        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
+//        int PatchUserStatusParams = patchUserPwd.getIdx();
+//
+//        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
+//                (rs, rowNum) -> new PatchUserStatusReq(
+//                        rs.getInt("Idx"),
+//                        rs.getString("userPwd")
+//                ),
+//                PatchUserStatusParams
+//        );
+//    }
 
     //특정 유저 리뷰 수정
     public int modifyReviewText(PatchUserReviewReq patchUserReviewReq) {
@@ -520,6 +521,13 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
     }
 
+
+    public int modifyUserPwd(PatchUserPwd patchUserPwd) {
+        String modifyUserPwdQuery = "update User set UserPwd = ? where Idx = ? ";
+        Object[] modifyUserPwdParams = new Object[]{patchUserPwd.getNewuserPwd(),patchUserPwd.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserPwdQuery, modifyUserPwdParams);
+    }
 
 
 }

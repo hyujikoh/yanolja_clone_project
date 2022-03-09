@@ -78,10 +78,12 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/hotel/model/GetHotelResConditoinType.java
  com.example.demo.src.hotel.model.GetHotelResConditoinType
+com/example/demo/src/user/model/PatchUserPwd.java
+ com.example.demo.src.user.model.PatchUserPwd
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/hotel/HotelController.java
  com.example.demo.src.hotel.HotelController
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
 com/example/demo/src/hotel/HotelProvider.java
  com.example.demo.src.hotel.HotelProvider
 com/example/demo/config/BaseResponseStatus.java
@@ -90,11 +92,11 @@ com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
