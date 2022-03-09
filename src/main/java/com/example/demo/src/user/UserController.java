@@ -367,4 +367,55 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+    @ResponseBody
+    @PostMapping("/{userIdx}/review")
+    public BaseResponse<PostReviewRes> CreatReview(@RequestBody PostReviewReq postReviewReq){
+        try{
+            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
+            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+
+            if(!isRegexReviewLength(postReviewReq.getReviewText())){
+                return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
+            }
+            System.out.println("이메일 로그인 시작");
+            PostReviewRes postReviewRes = userService.CreatReview(postReviewReq);
+            System.out.println("이메일 로그인 끝");
+            return new BaseResponse<>(postReviewRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /** ^^^^^^내가 만든 코드 ^^^^^^^
+      찜리스트 조회
+     * @return BaseResponse<List<GetUserRes>> 이것도 수정
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("/{userIdx}/favoritelist") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetUserFavRes>> UserByFavs(@PathVariable("userIdx") int userIdx ) { //
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건
+
+            List<GetUserFavRes> GetUserFavRes = userProvider.GetUserFav(userIdx); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(GetUserFavRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
+
+
+//    int userIdxByJwt = jwtService.getUserIdx();
+////userIdx와 접근한 유저가 같은지 확인
+//            if(userIdx != userIdxByJwt){
+//                    return new BaseResponse(INVALID_USER_JWT);
+//                    }// 무조건 유저 기준으로 조회 및 할때는 해당 JWT로 토근 생성한다.

@@ -158,4 +158,27 @@ public class UserService {
 //            throw new BaseException(FAILED_TO_LOGIN);
 //        }
 //    }
+
+
+    public PostReviewRes CreatReview(PostReviewReq postReviewReq) throws BaseException{
+        if(userProvider.checkReserveIdx(postReviewReq.getReserveIdx()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        }
+        try{
+            System.out.println("CCC4");
+            int userIdx = userDao.createuserreview(postReviewReq);
+            //jwt 발급.
+            String jwt = jwtService.createJwt(userIdx);
+            System.out.println(jwt);
+
+            return new PostReviewRes(jwt,userIdx,postReviewReq.getReviewText(),postReviewReq.getReviewRate());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+
+    }
+
+
 }

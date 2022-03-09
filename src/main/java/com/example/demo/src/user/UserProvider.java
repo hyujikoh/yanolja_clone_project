@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
 import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
@@ -67,6 +68,13 @@ public class UserProvider {
     public int checkEmail(String userEmail) throws BaseException{
         try{
             return userDao.checkEmail(userEmail);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public int checkReserveIdx(int reserveIdx) throws BaseException{
+        try{
+            return userDao.checkReserveIdx(reserveIdx);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -153,6 +161,36 @@ public class UserProvider {
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
+
+    @Transactional
+    public List<GetUserFavRes> GetUserFav(int userIdx) throws BaseException{
+        try{
+//            User user = userDao.getPwd_email(postLoginReq);
+
+
+
+            System.out.println("3");
+            //jwt 발급.
+//            String jwt = jwtService.createJwt(userIdx);
+
+//            if(user.getUserPwd().equals(password)){
+//                int userIdx = user.getIdx();
+//                String jwt = jwtService.createJwt(userIdx);
+//                System.out.println("jwt:" + jwt);
+//                return new PostLoginRes(userIdx,jwt);
+//if ()
+//            System.out.println(jwt);
+
+
+            List<GetUserFavRes> getUserFavRes = userDao.getUserFav(userIdx);
+            System.out.println("4");
+            return getUserFavRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

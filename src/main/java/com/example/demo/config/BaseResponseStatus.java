@@ -29,6 +29,7 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    POST_USERS_EXISTS_RESERVE(false,2022,"이미 등룩된 예약정보입니다."),
     POST_USERS_INVALID_PHONE(false,2018,"전화번호 형식을 확인해주세요."),
     POST_USERS_INVALID_USERNAME(false,2019,"아이디형식을 확인해주세요."),
     POST_USERS_INVALID_PASSWORD(false,2020,"비밀번호 형식이 잘못되었습니다. 6~12자 영문,숫자, 특수문자포함"),
