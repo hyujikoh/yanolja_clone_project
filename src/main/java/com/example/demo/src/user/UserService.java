@@ -212,6 +212,20 @@ public class UserService {
 
     }
 
+    public void deleteUserReview(deleteUserReview deleteUserReview) throws BaseException{
+        try{
+            System.out.println("service 닉네임");
+            int result = userDao.deleteUserReview(deleteUserReview);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+    }
+
 
 //    public void modifyUserFavStatus(PatchUserFav patchUserFav) throws BaseException{
 //        try{

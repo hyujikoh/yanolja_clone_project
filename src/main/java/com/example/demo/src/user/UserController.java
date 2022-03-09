@@ -473,19 +473,18 @@ public class UserController {
         }
     }
     @ResponseBody
-    @PatchMapping("/{userIdx}/review/delete")
-    public BaseResponse<String> deleteUserreview(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserCart patchUserCart) {
+    @PatchMapping("/{userIdx}/review/delete/{reviewIdx}")
+    public BaseResponse<String> deleteUserreview(@PathVariable("userIdx") int userIdx,@PathVariable("reviewIdx") int reviewIdx, @RequestBody deleteUserReview deleteUserReview) {
         try {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             System.out.println(userIdxByJwt);
             if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
+                return new BaseResponse<>(INVALID_USER_JWT);}
             //같다면 유저찜 리스트 비활성화 시키기
-            patchUserCart = new PatchUserCart(userIdx, patchUserCart.getIdx());
-            userService.modifyUserCartStatus(patchUserCart);
+            deleteUserReview = new deleteUserReview(userIdx,reviewIdx);
+            userService.deleteUserReview(deleteUserReview);
             System.out.println("phone1");
             return new BaseResponse<>(DELETE_SUCCESS);
         } catch (BaseException exception) {

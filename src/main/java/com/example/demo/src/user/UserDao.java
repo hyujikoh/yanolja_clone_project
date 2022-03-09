@@ -145,7 +145,15 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserCartQuery, modifyUserCartParams);
     }
+    public int deleteUserReview(deleteUserReview deleteUserReview) {
+        String deleteUserReviewQuery = "update Review set status='DELETE' where userIdx= ? and Idx =?";
 
+
+        Object[] deleteUserReviewParams = new Object[]{deleteUserReview.getUserIdx(),deleteUserReview.getIdx()};
+
+        return this.jdbcTemplate.update(deleteUserReviewQuery, deleteUserReviewParams);
+
+    }
     //유저 이메일 수정
     public int modifyUserEmail(PatchUserEmailReq patchUserEmailReq) {
         String modifyUserEmailQuery = "update User set userEmail = ? where Idx = ? ";
@@ -496,6 +504,7 @@ public class UserDao {
         System.out.println("CCC7");
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
     }
+
 
 
 }
