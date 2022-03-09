@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table(name="User")
 
 public class PatchUserStatusReq {
     private int Idx;

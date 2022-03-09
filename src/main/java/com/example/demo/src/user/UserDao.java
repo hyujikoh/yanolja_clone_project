@@ -162,13 +162,26 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserEmailQuery, modifyUserEmailParams);
     }
 
-    //    //내가 만든 패치 3 !
-//    public int modifyUserStatus(PatchUserStatusReq patchUserStatusReq) {
-//        String modifyUserStatusQuery = "update User set status = 'INACTIVATE' where Idx = ? ";
-//        Object[] modifyUserStatusParams = new Object[]{patchUserStatusReq.getIdx()};
-//
-//        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
-//    }
+        //내가 만든 패치 3 !
+    public int modifyUserStatus(PatchUserStatusReq patchUserStatusReq) {
+        String modifyUserStatusQuery = "update User set status = 'Delete' where Idx = ? ";
+        Object[] modifyUserStatusParams = new Object[]{patchUserStatusReq.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
+    }
+    public PatchUserStatusReq getPwd_idx(PatchUserStatusReq patchUserStatusReq) {
+        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
+        int PatchUserStatusParams = patchUserStatusReq.getIdx();
+
+        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
+                (rs, rowNum) -> new PatchUserStatusReq(
+                        rs.getInt("Idx"),
+                        rs.getString("userPwd")
+                ),
+                PatchUserStatusParams
+        );
+    }
+
     //특정 유저 리뷰 수정
     public int modifyReviewText(PatchUserReviewReq patchUserReviewReq) {
         System.out.println("리뷰수정");
@@ -218,6 +231,8 @@ public class UserDao {
         );
 
     }
+
+
 
     /*특정 유저 기준 리뷰*/
 

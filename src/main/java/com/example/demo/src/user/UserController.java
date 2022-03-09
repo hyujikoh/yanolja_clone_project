@@ -325,31 +325,30 @@ public class UserController {
         }
     }
 
-
-
-
-
     /**
-     * 4. 유저탈퇴(status ACTIVATE  -> INACTIVATE 로 상태 변경) 오현직 메이드
+     * 4. 유저탈퇴(status ACTIVATE  -> DELETE 로 상태 변경) 오현직 메이드
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
-//    @ResponseBody
-//    @PatchMapping("/{Idx}/status")
-//    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody User user){
-//        System.out.println("00");
-//        try {
-//            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(Idx,user.getUserPwd());
-//            userService.modifyUserStatus(patchUserStatusReq);
-//            String result = "";
-//            System.out.println("상태11");
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            System.out.println("컨트럴러 캐치 에러나옴 ");
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-
+    @ResponseBody
+    @PatchMapping("/{Idx}/status")
+    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody PatchUserStatusReq patchUserStatusReq){
+        System.out.println("00");
+        try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(Idx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
+            patchUserStatusReq = new PatchUserStatusReq(Idx,patchUserStatusReq.getUserPwd());
+            userService.modifyUserStatus(patchUserStatusReq);
+            String result = "";
+            System.out.println("상태11");
+            return new BaseResponse<>(USER_DELETE_SUCCESS);
+        } catch (BaseException exception) {
+            System.out.println("컨트럴러 캐치 에러나옴 ");
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
     /** ^^^^^^내가 만든 코드 ^^^^^^^
      유저기준 장바구니 조회
      * @return BaseResponse<List<GetUserRes>> 이것도 수정

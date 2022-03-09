@@ -15,5 +15,4 @@ import javax.persistence.Table;
 public class deleteUserReview {
     private int userIdx;
     private int Idx;
-
 }

@@ -5,6 +5,7 @@ package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
+import com.example.demo.utils.SHA256;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,11 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+
+
+
+
     /* 오현직이 추가한 이메일 번경하는 서비스 처리기기*/
     public void modifyUserEmail(PatchUserEmailReq patchUserEmailReq) throws BaseException {
         try{
@@ -136,37 +142,29 @@ public class UserService {
     }
 
     /* 오현직이 추가한 회원상태 번경하는 서비스 처리기기*/
-//    public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
-////        try{
-////            System.out.println("service 유저상태");
-////            int result = userDao.modifyUserStatus(patchUserStatusReq);
-////            if(result == 0){
-////                throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
-////            }
-////        } catch(Exception exception){
-////            throw new BaseException(DATABASE_ERROR);
-////        }
-//        User user = userDao.modifyUserStatus(patchUserStatusReq);
-//        String password;
-//        try {
-//            //암호화
-//            password= new SHA256().encrypt(patchUserStatusReq.getUserPwd());
-//            System.out.println("pwd:"+password);
-//            patchUserStatusReq.setUserPwd(password);
-//        } catch (Exception ignored) {
-//            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
-//        }
-//
-//        if(user.getUserPwd().equals(password)){
-//            int userIdx = user.getIdx();
-//            String jwt = jwtService.createJwt(userIdx);
-//            System.out.println("jwt:" + jwt);
-//            return new PostLoginRes(userIdx,jwt);
-//        }
-//        else{
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
-//    }
+    public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
+        String password;
+        PatchUserStatusReq patchUserStatusReq1 = userDao.getPwd_idx(patchUserStatusReq);
+        try {
+            //암호화
+
+            password= new SHA256().encrypt(patchUserStatusReq.getUserPwd());
+            System.out.println("pwd:"+password);
+            patchUserStatusReq.setUserPwd(password);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
+
+        if(patchUserStatusReq.getUserPwd().equals(password)){
+            int result = userDao.modifyUserStatus(patchUserStatusReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USEREMAIL);
+            }
+        }
+        else{
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+    }
 
 
     public PostReviewRes CreatReview(PostReviewReq postReviewReq) throws BaseException{
