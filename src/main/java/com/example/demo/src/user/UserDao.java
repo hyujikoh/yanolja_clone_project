@@ -94,7 +94,14 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkResrveIdxQuery,
                 int.class,
                 checkResrveIdxParams);
-
+    }
+    public int checkHotelIdx(int hotelIdx,int userIdx) {
+        String checkResrveIdxQuery = "select exists(select hotelIdx, userIdx from FavoritesList where hotelIdx = ? and userIdx=?);";
+        int checkResrveIdxParams = hotelIdx;
+        int checkResrveIdxParams1 = userIdx;
+        return this.jdbcTemplate.queryForObject(checkResrveIdxQuery,
+                int.class,
+                checkResrveIdxParams,checkResrveIdxParams1);
     }
 
     // 템플릿 수정
@@ -119,6 +126,24 @@ public class UserDao {
         Object[] modifyUserNicknameParams = new Object[]{patchUserNicknameReq.getUserNickname(), patchUserNicknameReq.getIdx()};
 
         return this.jdbcTemplate.update(modifyUserNicknameQuery, modifyUserNicknameParams);
+    }
+
+    public int modifyUserFavs(PatchUserFav patchUserFav) {
+        String modifyUserFavQuery = "update FavoritesList set status='DELETE' where userIdx= ? and hotelIdx =?";
+
+
+        Object[] modifyUserFavParams = new Object[]{patchUserFav.getUserIdx(),patchUserFav.getHotelIdx()};
+
+        return this.jdbcTemplate.update(modifyUserFavQuery, modifyUserFavParams);
+    }
+
+    public int modifyUserCart(PatchUserCart patchUserCart) {
+        String modifyUserCartQuery = "update Cart set status='DELETE' where userIdx= ? and Idx =?";
+
+
+        Object[] modifyUserCartParams = new Object[]{patchUserCart.getUserIdx(),patchUserCart.getIdx()};
+
+        return this.jdbcTemplate.update(modifyUserCartQuery, modifyUserCartParams);
     }
 
     //유저 이메일 수정
@@ -343,7 +368,7 @@ public class UserDao {
 
         //reviewRate, reviewText, reserveIdx, userIdx, rev1, rev2,rev3,rev4
         Object[] getcreatereviewParams = new Object[]{postReviewReq.getReviewRate(), postReviewReq.getReviewText(), postReviewReq.getReserveIdx(),postReviewReq.getUserIdx(), postReviewReq.getRev1(), postReviewReq.getRev2(), postReviewReq.getRev3(), postReviewReq.getRev4()};
-        ;
+
         this.jdbcTemplate.update(getcreatereviewQuery, getcreatereviewParams);
 
         String lastInserIdQuery = "select last_insert_id()";
@@ -461,6 +486,17 @@ public class UserDao {
                         rs.getInt("userIdx")),
                 getUserFavsParams);
     }
+
+
+    public int createUserFav(PostUserFavReq postUserFavReq) {
+        String getCreateUserFavQuery = "insert into FavoritesList (hotelIdx,userIdx) values (?,?);";
+        Object[] getcreaterFavesParams = new Object[] {postUserFavReq.getHotelIdx(),postUserFavReq.getUserIdx()};
+        this.jdbcTemplate.update(getCreateUserFavQuery, getcreaterFavesParams);
+        String lastInserIdQuery = "select last_insert_id()";
+        System.out.println("CCC7");
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
+    }
+
 
 }
 

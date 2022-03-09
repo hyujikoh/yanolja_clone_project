@@ -79,7 +79,13 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public int checkHoteIdx(int hotelIdx,int userIdx) throws BaseException{
+        try{
+            return userDao.checkHotelIdx(hotelIdx,userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
     @Transactional
     public PostLoginRes logIn_email(PostLoginReq postLoginReq) throws BaseException{
@@ -191,6 +197,5 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
 
 }

@@ -395,14 +395,14 @@ public class UserController {
     //Query String
     @ResponseBody
     @GetMapping("/{userIdx}/favoritelist") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserFavRes>> UserByFavs(@PathVariable("userIdx") int userIdx ) { //
+    public BaseResponse<List<GetUserFavRes>> UserByFavs(@PathVariable("userIdx") int userIdx ) {
         try{
 
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt){
                 return new BaseResponse(INVALID_USER_JWT);
-            }// 무조건
+            }// 무조건 추가
 
             List<GetUserFavRes> GetUserFavRes = userProvider.GetUserFav(userIdx); // 검색조회
             System.out.println("2");
@@ -411,6 +411,93 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+
+    @ResponseBody
+    @PostMapping("/{userIdx}/favoritelist") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<PostUserFavRes> CreateUserByFavs(@RequestBody PostUserFavReq postUserFavReq) {
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            int userIdx = postUserFavReq.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
+
+           PostUserFavRes postUserFavRes = userService.createUserFav(postUserFavReq); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(postUserFavRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{userIdx}/favoritelist")
+    public BaseResponse<String> modifyUserFav(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserFav patchUserFav) {
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            System.out.println(userIdxByJwt);
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저찜 리스트 비활성화 시키기
+            patchUserFav = new PatchUserFav(userIdx, patchUserFav.getHotelIdx());
+            userService.modifyUserFavStatus(patchUserFav);
+            System.out.println("phone1");
+            return new BaseResponse<>(DELETE_SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{userIdx}/carts")
+    public BaseResponse<String> modifyUserCart(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserCart patchUserCart) {
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            System.out.println(userIdxByJwt);
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저찜 리스트 비활성화 시키기
+            patchUserCart = new PatchUserCart(userIdx, patchUserCart.getIdx());
+            userService.modifyUserCartStatus(patchUserCart);
+            System.out.println("phone1");
+            return new BaseResponse<>(DELETE_SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{userIdx}/review/delete")
+    public BaseResponse<String> deleteUserreview(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserCart patchUserCart) {
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            System.out.println(userIdxByJwt);
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저찜 리스트 비활성화 시키기
+            patchUserCart = new PatchUserCart(userIdx, patchUserCart.getIdx());
+            userService.modifyUserCartStatus(patchUserCart);
+            System.out.println("phone1");
+            return new BaseResponse<>(DELETE_SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+
+
+
+
 }
 
 

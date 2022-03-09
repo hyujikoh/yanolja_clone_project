@@ -3,10 +3,8 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
-import com.example.demo.utils.SHA256;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +73,7 @@ public class UserService {
     }
 
     /* 오현직이 추가한 핸드폰번호 번경하는 서비스 처리기기*/
-   public void modifyUserPhone(PatchUserReq_userPhone patchUserReq_userPhone) throws BaseException {
+    public void modifyUserPhone(PatchUserReq_userPhone patchUserReq_userPhone) throws BaseException {
         try{
             System.out.println("phone1");
             int result = userDao.modifyUserPhone(patchUserReq_userPhone);
@@ -99,6 +97,17 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public void modifyUserFavStatus(PatchUserFav patchUserFav) throws BaseException{
+        try{
+            System.out.println("service 닉네임");
+            int result = userDao.modifyUserFavs(patchUserFav);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     /* 오현직이 추가한 이메일 번경하는 서비스 처리기기*/
     public void modifyUserEmail(PatchUserEmailReq patchUserEmailReq) throws BaseException {
         try{
@@ -111,7 +120,7 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-// 리뷰 텍스트 변경하기
+    // 리뷰 텍스트 변경하기
     public void modifyReviewText(PatchUserReviewReq patchUserReviewReq) throws BaseException {
         try{
             System.out.println("service 리뷰변경");
@@ -162,7 +171,7 @@ public class UserService {
 
     public PostReviewRes CreatReview(PostReviewReq postReviewReq) throws BaseException{
         if(userProvider.checkReserveIdx(postReviewReq.getReserveIdx()) ==1){
-            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+            throw new BaseException(POST_USERS_EXISTS_RESERVE);
         }
         try{
             System.out.println("CCC4");
@@ -175,10 +184,44 @@ public class UserService {
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+    public PostUserFavRes createUserFav(PostUserFavReq postUserFavReq) throws BaseException{
+        if(userProvider.checkHoteIdx(postUserFavReq.getHotelIdx(), postUserFavReq.getUserIdx()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        } // 해당 찜이 이미 존재하는지
+        try{
+            userDao.createUserFav(postUserFavReq);
+
+            return new PostUserFavRes(postUserFavReq.getHotelIdx(),postUserFavReq.getUserIdx());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
+    public void modifyUserCartStatus(PatchUserCart patchUserCart) throws BaseException{
+        try{
+            System.out.println("service 닉네임");
+            int result = userDao.modifyUserCart(patchUserCart);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
 
     }
 
 
+//    public void modifyUserFavStatus(PatchUserFav patchUserFav) throws BaseException{
+//        try{
+//            System.out.println("service 닉네임");
+//            int result = userDao.modifyUserFavs(patchUserFav);
+//            if(result == 0){
+//                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
+//            }
+//        } catch(Exception exception){
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 }
