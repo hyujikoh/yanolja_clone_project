@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.security.provider.SHA;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -142,10 +143,10 @@ public class UserService {
         }
     }
 
-    /* 오현직이 추가한 회원상태 번경하는 서비스 처리기기*/
+    /* 오현직이 추가한 회원상태 번경하는 서비스 처리기기 성공!*/
     public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
         String password;
-        //PatchUserStatusReq patchUserStatusReq1 = userDao.getPwd_idx(patchUserStatusReq);
+        PatchUserStatusReq patchUserStatusReq1 = userDao.getPwd_idx(patchUserStatusReq);
         try {
             //암호화
 
@@ -156,7 +157,7 @@ public class UserService {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if(patchUserStatusReq.getUserPwd().equals(password)){
+        if(patchUserStatusReq1.getUserPwd().equals(password)){
             int result = userDao.modifyUserStatus(patchUserStatusReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USEREMAIL);
@@ -226,6 +227,7 @@ public class UserService {
     }
 
     public void modifyUserPwd(PatchUserPwd patchUserPwd) throws BaseException{
+        PatchUserStatusReq patchUserStatusReq = userDao.changePwd_idx(patchUserPwd);
         String password;
         try {
             //암호화
@@ -235,15 +237,20 @@ public class UserService {
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
-        if(patchUserPwd.getUserPwd().equals(password)){
+        if(patchUserStatusReq.getUserPwd().equals(password)){
             String newPwd=new SHA256().encrypt(patchUserPwd.getNewuserPwd());
             String checknewPwd=new SHA256().encrypt(patchUserPwd.getCheckuserPwd());
-            System.out.println(newPwd);
-            System.out.println(checknewPwd);
+            int result = userDao.modifyUserPwd(newPwd,patchUserPwd);
             if(newPwd.equals(checknewPwd)){
-                int result = userDao.modifyUserPwd(patchUserPwd);
-                patchUserPwd.setUserPwd(newPwd);
 
+
+                patchUserPwd.setUserPwd(newPwd);
+                if(result == 0){
+                    throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
+                }
+            }
+            else {
+                throw new BaseException(MODIFY_FAIL_FIXPASSWORD);
             }
         }
         else{
@@ -251,38 +258,39 @@ public class UserService {
 
     }
 
-//    public void modifyUserStatus(PatchUserStatusReq patchUserStatusReq) throws BaseException {
+
+//    public void modifyUserPwd(PatchUserPwd patchUserPwd,String newuserPwd) throws BaseException{
+////        PatchUserStatusReq patchUserStatusReq = userDao.changePwd_idx(patchUserPwd);
 //        String password;
-//        PatchUserStatusReq patchUserStatusReq1 = userDao.getPwd_idx(patchUserStatusReq);
 //        try {
 //            //암호화
-//
-//            password= new SHA256().encrypt(patchUserStatusReq.getUserPwd());
+//            password= new SHA256().encrypt(patchUserPwd.getUserPwd());
 //            System.out.println("pwd:"+password);
-//            patchUserStatusReq.setUserPwd(password);
+//            patchUserPwd.setUserPwd(password);
+////            String encryptPwd=new SHA256().encrypt(postUserReq.getUserPwd());
+////            postUserReq.setUserPwd(encryptPwd);
+//            newuserPwd= new SHA256().encrypt(newuserPwd);
 //        } catch (Exception ignored) {
 //            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
 //        }
+//        if(newuserPwd.equals(patchUserPwd.getUserPwd())){
+////            String newPwd=new SHA256().encrypt(patchUserPwd.getNewuserPwd());
+////            String checknewPwd=new SHA256().encrypt(patchUserPwd.getCheckuserPwd());
+////            String newPassword = new SHA256().encrypt(newuserPwd);
 //
-//        if(patchUserStatusReq.getUserPwd().equals(password)){
-//            int result = userDao.modifyUserStatus(patchUserStatusReq);
-//            if(result == 0){
-//                throw new BaseException(MODIFY_FAIL_USEREMAIL);
+//            newuserPwd = new SHA256().encrypt(patchUserPwd.getUserPwd());
+//            int result = userDao.modifyUserPwd(newuserPwd,patchUserPwd);
+//
+//
+//                if(result == 0){
+//                    throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
+//                }
+//
+//            }else {
+//                throw new BaseException(MODIFY_FAIL_PASSWORDERROR);
 //            }
-//        }
-//        else{
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
+//
+//
 //    }
-//    public void modifyUserFavStatus(PatchUserFav patchUserFav) throws BaseException{
-//        try{
-//            System.out.println("service 닉네임");
-//            int result = userDao.modifyUserFavs(patchUserFav);
-//            if(result == 0){
-//                throw new BaseException(MODIFY_FAIL_USERNICKNAME);
-//            }
-//        } catch(Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+
 }

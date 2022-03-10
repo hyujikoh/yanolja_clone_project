@@ -518,28 +518,32 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+}
+
+
 //    @ResponseBody
-//    @PatchMapping("/{Idx}/status")
-//    public BaseResponse<String> modifyUserStatus(@PathVariable("Idx") int Idx, @RequestBody PatchUserStatusReq patchUserStatusReq){
-//        System.out.println("00");
+//    @PatchMapping("/{Idx}/password")
+//    public BaseResponse<String> modifyUserPwd(@PathVariable("Idx") int Idx,  @RequestBody PatchUserPwd patchUserPwd,String userPwd){
+//
 //        try {
 //            int userIdxByJwt = jwtService.getUserIdx();
 //            if(Idx != userIdxByJwt){
 //                return new BaseResponse(INVALID_USER_JWT);
 //            }// 무조건 추가
-//            patchUserStatusReq = new PatchUserStatusReq(Idx,patchUserStatusReq.getUserPwd());
-//            userService.modifyUserStatus(patchUserStatusReq);
-//            String result = "";
-//            System.out.println("상태11");
-//            return new BaseResponse<>(USER_DELETE_SUCCESS);
+//
+//            userPwd=patchUserPwd.getUserPwd(); // 기존비밀번호
+//            patchUserPwd = new PatchUserPwd(Idx,userPwd,patchUserPwd.getNewuserPwd());
+//            userService.modifyUserPwd(patchUserPwd,userPwd);
+//            System.out.println("phone1");
+//            return new BaseResponse<>(SUCCESS_CHANGE_USER_PWD);
 //        } catch (BaseException exception) {
 //            System.out.println("컨트럴러 캐치 에러나옴 ");
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
 //    }
-
-
-}
+//
+//
+//}
 
 
 //    int userIdxByJwt = jwtService.getUserIdx();

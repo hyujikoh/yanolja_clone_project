@@ -170,18 +170,30 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams);
     }
 
-//    public PatchUserStatusReq changePwd_idx(PatchUserPwd patchUserPwd) {
-//        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
-//        int PatchUserStatusParams = patchUserPwd.getIdx();
-//
-//        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
-//                (rs, rowNum) -> new PatchUserStatusReq(
-//                        rs.getInt("Idx"),
-//                        rs.getString("userPwd")
-//                ),
-//                PatchUserStatusParams
-//        );
-//    }
+    public PatchUserStatusReq changePwd_idx(PatchUserPwd patchUserPwd) {
+        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
+        int PatchUserStatusParams = patchUserPwd.getIdx();
+
+        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
+                (rs, rowNum) -> new PatchUserStatusReq(
+                        rs.getInt("Idx"),
+                        rs.getString("userPwd")
+                ),
+                PatchUserStatusParams
+        );
+    }
+    public PatchUserStatusReq getPwd_idx(PatchUserStatusReq patchUserStatusReq) {
+        String PatchUserStatusQuery = "select Idx,userPwd from User where Idx = ?";
+        int PatchUserStatusParams = patchUserStatusReq.getIdx();
+
+        return this.jdbcTemplate.queryForObject(PatchUserStatusQuery,
+                (rs, rowNum) -> new PatchUserStatusReq(
+                        rs.getInt("Idx"),
+                        rs.getString("userPwd")
+                ),
+                PatchUserStatusParams
+        );
+    }
 
     //특정 유저 리뷰 수정
     public int modifyReviewText(PatchUserReviewReq patchUserReviewReq) {
@@ -522,13 +534,19 @@ public class UserDao {
     }
 
 
-    public int modifyUserPwd(PatchUserPwd patchUserPwd) {
-        String modifyUserPwdQuery = "update User set UserPwd = ? where Idx = ? ";
-        Object[] modifyUserPwdParams = new Object[]{patchUserPwd.getNewuserPwd(),patchUserPwd.getIdx()};
+    public int modifyUserPwd(String newuserPwd,PatchUserPwd patchUserPwd) {
+        String modifyUserPwdQuery = "update User set userPwd = ? where userPwd =? and Idx = ? ";
+        Object[] modifyUserPwdParams = new Object[]{newuserPwd,patchUserPwd.getUserPwd(),patchUserPwd.getIdx()};
 
         return this.jdbcTemplate.update(modifyUserPwdQuery, modifyUserPwdParams);
     }
 
 
+//    public int modifyUserPwd(String newuserPwd,PatchUserPwd patchUserPwd) {
+//        String modifyUserPwdQuery = "update User set userPwd = ? where userPwd =? and Idx = ? ";
+//        Object[] modifyUserPwdParams = new Object[]{newuserPwd,patchUserPwd.getUserPwd(),patchUserPwd.getIdx()};
+//        System.out.println("123");
+//        return this.jdbcTemplate.update(modifyUserPwdQuery, modifyUserPwdParams);
+//    }
 }
 

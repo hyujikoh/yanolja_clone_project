@@ -61,7 +61,8 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERSTATUS(false,4016,"유저상태 수정 실패"), // 내가만듬!
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
-    MODIFY_FAIL_PASSWORDERROR(false,4017,"유저상태 수정 실패"); // 내가만듬!
+    MODIFY_FAIL_PASSWORDERROR(false,4017,"유저상태 수정 실패"), // 내가만듬!
+    MODIFY_FAIL_FIXPASSWORD(false,4018,"새 비밀번호가 일치하지 않았습니다"); // 내가만듬!
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
