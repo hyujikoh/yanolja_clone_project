@@ -532,7 +532,16 @@ public class UserDao {
         System.out.println("CCC7");
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
     }
+    public int createUserCart(PostUserCart postUserCart) {
+        String getCreateUserCartQuery = "insert into Cart (userIdx,roomIdx,hotelIdx,priceIdx,entranceTime,checkoutTime) values (?,?,?,?,?,?);";
+        Object[] getCreateUserCartParams = new Object[] {postUserCart.getUserIdx(),postUserCart.getRoomIdx(),postUserCart.getHotelIdx(),postUserCart.getPriceIdx(),postUserCart.getEntranceTime(),postUserCart.getCheckoutTime()};
+        this.jdbcTemplate.update(getCreateUserCartQuery, getCreateUserCartParams);
+        String lastInserIdQuery = "select last_insert_id()";
+        System.out.println("CCC7");
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
 
+
+    }
 
     public int modifyUserPwd(String newuserPwd,PatchUserPwd patchUserPwd) {
         String modifyUserPwdQuery = "update User set userPwd = ? where userPwd =? and Idx = ? ";
@@ -540,6 +549,7 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserPwdQuery, modifyUserPwdParams);
     }
+
 
 
 //    public int modifyUserPwd(String newuserPwd,PatchUserPwd patchUserPwd) {

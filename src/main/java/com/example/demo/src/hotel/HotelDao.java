@@ -77,6 +77,65 @@ public class HotelDao {
         );
     }
 
+    public List<GetHotelResConditoin> HotelByhotelLocationType(String locationType) {
+        String getHotelByhotelLocationQuery1 =
+                "select H.Idx,\n" +
+                        "       H.hotelName  ,\n" +
+                        "       H.hotelLocation,\n" +
+                        "       H.hotelOpt   ,\n" +
+                        "       H.auth       ,\n" +
+                        "       imageUrl   ,\n" +
+                        "       reviewcount,\n" +
+                        "       reviewavg,\n" +
+                        "       stayprice,\n" +
+                        "       staypricediscount,\n" +
+                        "       dayuseprice,\n" +
+                        "       dayusepricediscount,\n" +
+                        "       H.hotelDesc  \n" +
+                        "from Hotel H\n" +
+                        "         inner join (select * from HotelImage WHERE type = 1) R1 on (R1.hotelIdx = H.Idx)\n" +
+                        "         inner join (select count(*) as reviewcount, round(avg(reviewRate), 1) as reviewavg, hotelIdx 호텔번호\n" +
+                        "                     from Review Rev\n" +
+                        "                              inner join (select Idx, hotelIdx from Reserve) Reserve on (Reserve.Idx = Rev.reserveIdx)\n" +
+                        "                     group by hotelIdx) R2 on (H.Idx = R2.호텔번호)\n" +
+                        "\n" +
+                        "         inner join (select idx,\n" +
+                        "                            roomName,\n" +
+                        "                            roomType,\n" +
+                        "                            case when roomCount = 0 then '예약마감' else 가격 end  as stayprice,\n" +
+                        "                            staypricediscount,\n" +
+                        "                            대실가격 as dayuseprice,\n" +
+                        "                            dayusepricediscount,\n" +
+                        "                            hotelIdx\n" +
+                        "                     from Room R0\n" +
+                        "                              left outer join (select roomdx, 숙박가격 가격, 숙박할인가격 as staypricediscount, 대실가격, 대실할인가격 as dayusepricediscount\n" +
+                        "                                               from Price\n" +
+                        "                                               where case\n" +
+                        "                                                         when dayofweek(now()) = (6 or 7) then dayType = 2\n" +
+                        "                                                         else dayType = 1 end\n" +
+                        "                     ) R on (R.roomdx = R0.Idx)) R3 on (R3.hotelIdx = H.Idx)\n" +
+                        "where locationType like concat('%',?,'%')\n" +
+                        "group by H.Idx;";
+        String getHotelByhotelLoactionParams = locationType;
+        System.out.println("다오에러");
+        return this.jdbcTemplate.query(getHotelByhotelLocationQuery1,
+                (rs, rowNum) -> new GetHotelResConditoin(
+                        rs.getInt("Idx"),
+                        rs.getString("hotelName"),
+                        rs.getString("hotelLocation"),
+                        rs.getInt("hotelOpt"),
+                        rs.getInt("auth"),
+                        rs.getString("imageUrl"),
+                        rs.getInt("reviewcount"),
+                        rs.getFloat("reviewavg"),
+                        rs.getString("stayprice"),
+                        rs.getInt("staypricediscount"),
+                        rs.getString("dayuseprice"),
+                        rs.getInt("dayusepricediscount"),
+                        rs.getString("hotelDesc")),
+                getHotelByhotelLoactionParams);
+    }
+
     public List<GetHotelResConditoin> HotelByhotelName(String hotelName) {
         String getHotelByhotelNameQuery1 =
                 "select H.Idx,\n" +
@@ -380,4 +439,5 @@ public class HotelDao {
                         rs.getString("reviewImageUrl")),
                 getHotelReviewsParams);
     }
+
 }

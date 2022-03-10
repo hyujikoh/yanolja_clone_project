@@ -45,7 +45,17 @@ public class HotelProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public List<GetHotelResConditoin> HotelByhotelLocationType(String locationType) throws BaseException{
+        try{
+            System.out.println("3");
+            List<GetHotelResConditoin> getHotelResConditoin = hotelDao.HotelByhotelLocationType(locationType);
+            System.out.println("4");
+            return getHotelResConditoin;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public List<GetHotelResConditoin> getHotelByhotelName(String hotelName) throws BaseException{
         try{
             System.out.println("3");
@@ -111,4 +121,6 @@ public class HotelProvider {
         }
 
     }
+
+
 }

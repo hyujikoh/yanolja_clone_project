@@ -388,6 +388,26 @@ public class UserController {
         }
     }
 
+
+    @ResponseBody
+    @PostMapping("/{userIdx}/cart")
+    public BaseResponse<PostUserCart> CreatCart(@RequestBody PostUserCart postUserCart){
+        try{
+            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
+            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+
+//            if(!isRegexReviewLength(postReviewReq.getReviewText())){
+//                return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
+//            }
+            System.out.println("이메일 로그인 시작");
+            PostUserCart postUserCart_response = userService.CreatUserCart(postUserCart);
+            System.out.println("이메일 로그인 끝");
+            return new BaseResponse<>(postUserCart_response);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
     /** ^^^^^^내가 만든 코드 ^^^^^^^
       찜리스트 조회
      * @return BaseResponse<List<GetUserRes>> 이것도 수정

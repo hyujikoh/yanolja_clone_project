@@ -50,8 +50,8 @@ com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/user/model/PostLoginPhoneReq.java
  com.example.demo.src.user.model.PostLoginPhoneReq
-com/example/demo/src/hotel/HotelController.java
- com.example.demo.src.hotel.HotelController
+com/example/demo/src/kakao/OAuthToken.java
+ com.example.demo.src.kakao.OAuthToken
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
 com/example/demo/src/user/model/GetUserFavRes.java
@@ -66,8 +66,11 @@ com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/user/model/PatchUserCart.java
  com.example.demo.src.user.model.PatchUserCart
-com/example/demo/src/hotel/HotelDao.java
- com.example.demo.src.hotel.HotelDao
+com/example/demo/src/kakao/KakaoProfile.java
+ com.example.demo.src.kakao.KakaoProfile
+ com.example.demo.src.kakao.KakaoProfile$KakaoAccount
+ com.example.demo.src.kakao.KakaoProfile$KakaoAccount$Profile
+ com.example.demo.src.kakao.KakaoProfile$Properties
 com/example/demo/src/hotel/HotelService.java
  com.example.demo.src.hotel.HotelService
 com/example/demo/src/user/model/PostReviewReq.java
@@ -84,30 +87,31 @@ com/example/demo/src/user/model/PatchUserReq_userPhone.java
  com.example.demo.src.user.model.PatchUserReq_userPhone
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
-com/example/demo/src/hotel/HotelProvider.java
- com.example.demo.src.hotel.HotelProvider
+com/example/demo/src/kakao/UserRepository.java
+ com.example.demo.src.kakao.UserRepository
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
+com/example/demo/src/hotel/model/GetHotelType.java
+ com.example.demo.src.hotel.model.GetHotelType
+com/example/demo/src/hotel/HotelController.java
+ com.example.demo.src.hotel.HotelController
+com/example/demo/src/hotel/HotelDao.java
+ com.example.demo.src.hotel.HotelDao
+com/example/demo/src/kakao/KakaoLoginController.java
+ com.example.demo.src.kakao.KakaoLoginController
+com/example/demo/src/hotel/HotelProvider.java
+ com.example.demo.src.hotel.HotelProvider
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/user/model/PostUserCart.java
+ com.example.demo.src.user.model.PostUserCart
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/kakao/OAuthToken.java
- com.example.demo.src.kakao.OAuthToken
-com/example/demo/src/kakao/KakaoProfile.java
- com.example.demo.src.kakao.KakaoProfile
- com.example.demo.src.kakao.KakaoProfile$KakaoAccount
- com.example.demo.src.kakao.KakaoProfile$KakaoAccount$Profile
- com.example.demo.src.kakao.KakaoProfile$Properties
-com/example/demo/src/kakao/UserRepository.java
- com.example.demo.src.kakao.UserRepository
-com/example/demo/src/kakao/KakaoLoginController.java
- com.example.demo.src.kakao.KakaoLoginController

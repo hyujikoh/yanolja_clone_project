@@ -64,6 +64,27 @@ public class HotelController {
         }
     }
 
+    //Query String
+    @ResponseBody
+    @GetMapping("/hoteLocation") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetHotelResConditoin>> HotelByhotelLocation(@RequestParam(required = false) String locationType) { //
+        try{
+            if(locationType == null){
+                System.out.println("1");
+                List<GetHotelResConditoin> getHotelResConditoin = hotelProvider.getHotels();
+                System.out.println("0");
+                return new BaseResponse<>(getHotelResConditoin);
+            }
+            // Get Users
+
+            List<GetHotelResConditoin> getHotelResConditoin = hotelProvider.HotelByhotelLocationType(locationType); // 검색조회
+            System.out.println("2");
+            return new BaseResponse<>(getHotelResConditoin);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     /** ^^^^^^내가 만든 코드 ^^^^^^^
      * 호텔조회 API
      * [GET] /hotels

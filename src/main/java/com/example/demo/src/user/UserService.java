@@ -197,7 +197,15 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public PostUserCart CreatUserCart(PostUserCart postUserCart) throws BaseException{
+        try{
+            userDao.createUserCart(postUserCart);
 
+            return new PostUserCart(postUserCart.getUserIdx(),postUserCart.getRoomIdx(),postUserCart.getHotelIdx(),postUserCart.getPriceIdx(),postUserCart.getEntranceTime(),postUserCart.getCheckoutTime());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
     public void modifyUserCartStatus(PatchUserCart patchUserCart) throws BaseException{
         try{
@@ -257,6 +265,8 @@ public class UserService {
             throw new BaseException(FAILED_TO_LOGIN);}
 
     }
+
+
 
 
 //    public void modifyUserPwd(PatchUserPwd patchUserPwd,String newuserPwd) throws BaseException{
