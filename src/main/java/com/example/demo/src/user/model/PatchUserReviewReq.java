@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 
 public class PatchUserReviewReq {
-    private int Idx;
-    private String reviewText;
     private int userIdx;
+    private String reviewText;
+    private int Idx;
 
 }

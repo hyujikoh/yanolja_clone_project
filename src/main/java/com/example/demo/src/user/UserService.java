@@ -40,6 +40,9 @@ public class UserService {
         if(userProvider.checkEmail(postUserReq.getUserEmail()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
+        if(userProvider.checkPhone(postUserReq.getUserPhone()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_PHONE);
+        }
 
         String pwd;
         try{
@@ -174,9 +177,8 @@ public class UserService {
             throw new BaseException(POST_USERS_EXISTS_RESERVE);
         }
         try{
+            userDao.createuserreview(postReviewReq);
             System.out.println("CCC4");
-
-
             return new PostReviewRes(postReviewReq.getUserIdx(),postReviewReq.getReviewText(),postReviewReq.getReviewRate());
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

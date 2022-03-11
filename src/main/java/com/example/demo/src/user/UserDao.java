@@ -85,7 +85,13 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
-
+    }
+    public int checkPhone(String userPhone) {
+        String checkPhoneQuery = "select exists(select userPhone from User where userPhone = ?)";
+        String checkPhoneParams = userPhone;
+        return this.jdbcTemplate.queryForObject(checkPhoneQuery,
+                int.class,
+                checkPhoneParams);
     }
 
     public int checkReserveIdx(int reserveIdx) {
@@ -199,7 +205,7 @@ public class UserDao {
     public int modifyReviewText(PatchUserReviewReq patchUserReviewReq) {
         System.out.println("리뷰수정");
         String modifyReviewTextQuery = "update Review set reviewText = ? where userIdx = ? and Idx = ? ;"; // and 연산자 사용시 우선순위는 맨뒤에 있다.
-        Object[] modifyReviewTextParams = new Object[]{patchUserReviewReq.getReviewText(), patchUserReviewReq.getIdx(), patchUserReviewReq.getUserIdx()};
+        Object[] modifyReviewTextParams = new Object[]{patchUserReviewReq.getReviewText(),  patchUserReviewReq.getUserIdx(),patchUserReviewReq.getIdx()};
 
         return this.jdbcTemplate.update(modifyReviewTextQuery, modifyReviewTextParams);
     }
@@ -399,8 +405,7 @@ public class UserDao {
 
     }*/
     public int createuserreview(PostReviewReq postReviewReq) {
-        String getcreatereviewQuery = "insert into Review (reviewRate, reviewText, reserveIdx, userIdx, rev1, rev2,rev3,rev4)\n" +
-                "VALUES (?,?,?,?,?,?,?,?);";
+        String getcreatereviewQuery = "insert into Review (reviewRate, reviewText, reserveIdx, userIdx, rev1, rev2,rev3,rev4) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
 
         //reviewRate, reviewText, reserveIdx, userIdx, rev1, rev2,rev3,rev4
         Object[] getcreatereviewParams = new Object[]{postReviewReq.getReviewRate(), postReviewReq.getReviewText(), postReviewReq.getReserveIdx(),postReviewReq.getUserIdx(), postReviewReq.getRev1(), postReviewReq.getRev2(), postReviewReq.getRev3(), postReviewReq.getRev4()};
@@ -549,6 +554,7 @@ public class UserDao {
 
         return this.jdbcTemplate.update(modifyUserPwdQuery, modifyUserPwdParams);
     }
+
 
 
 

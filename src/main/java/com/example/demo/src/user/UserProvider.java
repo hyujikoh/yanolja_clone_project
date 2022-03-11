@@ -72,6 +72,13 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public int checkPhone(String userPhone) throws BaseException{
+        try{
+            return userDao.checkPhone(userPhone);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public int checkReserveIdx(int reserveIdx) throws BaseException{
         try{
             return userDao.checkReserveIdx(reserveIdx);
@@ -86,7 +93,33 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public PostLoginRes logIn_phone(PostLoginPhoneReq postLoginPhoneReq) throws BaseException{
+        User user = userDao.getPwd_phone(postLoginPhoneReq);
+        String password;
+//        if(checkPhone(postLoginPhoneReq.getUserPhone()) ==1){
+//            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+//        }
+        try {
+            //암호화
+            password= new SHA256().encrypt(postLoginPhoneReq.getUserPwd());
+            System.out.println("pwd:"+password);
+            postLoginPhoneReq.setUserPwd(password);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
 
+        if(user.getUserPwd().equals(password)){
+            int userIdx = user.getIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            System.out.println("jwt:" + jwt);
+            return new PostLoginRes(userIdx,jwt);
+        }
+        else{
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+
+    }
     @Transactional
     public PostLoginRes logIn_email(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd_email(postLoginReq);
@@ -129,30 +162,7 @@ public class UserProvider {
 
     }
 
-    public PostLoginRes logIn_phone(PostLoginPhoneReq postLoginPhoneReq) throws BaseException{
-        User user = userDao.getPwd_phone(postLoginPhoneReq);
-        String password;
-        try {
-            //암호화
-            password= new SHA256().encrypt(postLoginPhoneReq.getUserPwd());
-            System.out.println("pwd:"+password);
-            postLoginPhoneReq.setUserPwd(password);
-        } catch (Exception ignored) {
-            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
-        }
 
-        if(user.getUserPwd().equals(password)){
-            int userIdx = user.getIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            System.out.println("jwt:" + jwt);
-            return new PostLoginRes(userIdx,jwt);
-        }
-        else{
-            throw new BaseException(FAILED_TO_LOGIN);
-        }
-
-
-    }
 
     @Transactional
     public List<GetUserCartReq> getUserCarts(int userIdx) throws BaseException{
