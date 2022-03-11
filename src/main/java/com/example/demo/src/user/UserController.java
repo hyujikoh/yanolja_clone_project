@@ -74,6 +74,11 @@ public class UserController {
     public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx ){
         // Get Users
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             GetUserRes getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -218,14 +223,11 @@ public class UserController {
         System.out.println("00");
 
         try {
-//            //jwt에서 idx 추출.
-//            System.out.println("시전");
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            System.out.println(userIdxByJwt);
-//            if(Idx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(Idx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             //같다면 유저네임 변경
             PatchUserReq_userPhone patchUserReq_userPhone = new PatchUserReq_userPhone(Idx,user.getUserPhone());
             userService.modifyUserPhone(patchUserReq_userPhone);
@@ -250,10 +252,13 @@ public class UserController {
         System.out.println("00");
 
         try {
-
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(Idx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             PatchUserNicknameReq patchUserNicknameReq = new PatchUserNicknameReq(Idx,user.getUserNickname());
             userService.modifyUserNickname(patchUserNicknameReq);
-
             String result = "";
             System.out.println("phone1");
             return new BaseResponse<>(result);
@@ -273,6 +278,11 @@ public class UserController {
     public BaseResponse<String> modifyUserEmail(@PathVariable("Idx") int Idx, @RequestBody User user){
         System.out.println("00");
         try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(Idx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             PatchUserEmailReq patchUserEmailReq = new PatchUserEmailReq(Idx,user.getUserEmail());
             userService.modifyUserEmail(patchUserEmailReq);
             String result = "";
@@ -294,6 +304,11 @@ public class UserController {
         }
 
         try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             PatchUserReviewReq patchUserReviewReq = new PatchUserReviewReq(userIdx, user.getReviewText(), user.getIdx());
             userService.modifyReviewText(patchUserReviewReq);
             String result = "";
@@ -316,7 +331,11 @@ public class UserController {
     @GetMapping("/{userIdx}/reviews") // (GET) 127.0.0.1:9000/app/users
     public BaseResponse<List<GetUserReview>> UserByReviews(@PathVariable("userIdx") int userIdx ) { //
         try{
-
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             List<GetUserReview> getUserReviews = userProvider.getUserReview(userIdx); // 검색조회
             System.out.println("2");
             return new BaseResponse<>(getUserReviews);
@@ -359,7 +378,11 @@ public class UserController {
     @GetMapping("/{userIdx}/carts") // (GET) 127.0.0.1:9000/app/users
     public BaseResponse<List<GetUserCartReq>> UserByCarts(@PathVariable("userIdx") int userIdx ) { //
         try{
-
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             List<GetUserCartReq> getUserCartReqs = userProvider.getUserCarts(userIdx); // 검색조회
             System.out.println("2");
             return new BaseResponse<>(getUserCartReqs);
@@ -371,14 +394,18 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/{userIdx}/review")
-    public BaseResponse<PostReviewRes> CreatReview(@RequestBody PostReviewReq postReviewReq){
+    public BaseResponse<PostReviewRes> CreatReview(@PathVariable("userIdx") int userIdx,@RequestBody PostReviewReq postReviewReq){
+        if(!isRegexReviewLength(postReviewReq.getReviewText())){
+            return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
+        }
         try{
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-
-            if(!isRegexReviewLength(postReviewReq.getReviewText())){
-                return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
-            }
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             System.out.println("이메일 로그인 시작");
             PostReviewRes postReviewRes = userService.CreatReview(postReviewReq);
             System.out.println("이메일 로그인 끝");
@@ -391,14 +418,16 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/{userIdx}/cart")
-    public BaseResponse<PostUserCart> CreatCart(@RequestBody PostUserCart postUserCart){
+    public BaseResponse<PostUserCart> CreatCart(@PathVariable ("userIdx") int userIdx,@RequestBody PostUserCart postUserCart){
         try{
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
 
-//            if(!isRegexReviewLength(postReviewReq.getReviewText())){
-//                return new BaseResponse<>(POST_REVIEW_INVALID_TEXTLENGTH);
-//            }
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse(INVALID_USER_JWT);
+            }// 무조건 추가
             System.out.println("이메일 로그인 시작");
             PostUserCart postUserCart_response = userService.CreatUserCart(postUserCart);
             System.out.println("이메일 로그인 끝");
@@ -436,11 +465,10 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/{userIdx}/favoritelist") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<PostUserFavRes> CreateUserByFavs(@RequestBody PostUserFavReq postUserFavReq) {
+    public BaseResponse<PostUserFavRes> CreateUserByFavs(@PathVariable("userIdx") int userIdx,@RequestBody PostUserFavReq postUserFavReq) {
         try{
 
             int userIdxByJwt = jwtService.getUserIdx();
-            int userIdx = postUserFavReq.getUserIdx();
             if(userIdx != userIdxByJwt){
                 return new BaseResponse(INVALID_USER_JWT);
             }// 무조건 추가
@@ -522,7 +550,9 @@ public class UserController {
     @ResponseBody
     @PatchMapping("/{Idx}/password")
     public BaseResponse<String> modifyUserPassword(@PathVariable("Idx") int Idx, @RequestBody PatchUserPwd patchUserPwd){
-
+        if(!isRegexPassword(patchUserPwd.getUserPwd())){
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
         try {
             int userIdxByJwt = jwtService.getUserIdx();
             if(Idx != userIdxByJwt){

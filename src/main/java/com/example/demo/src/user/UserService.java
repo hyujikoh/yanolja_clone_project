@@ -175,12 +175,9 @@ public class UserService {
         }
         try{
             System.out.println("CCC4");
-            int userIdx = userDao.createuserreview(postReviewReq);
-            //jwt 발급.
-            String jwt = jwtService.createJwt(userIdx);
-            System.out.println(jwt);
 
-            return new PostReviewRes(jwt,userIdx,postReviewReq.getReviewText(),postReviewReq.getReviewRate());
+
+            return new PostReviewRes(postReviewReq.getUserIdx(),postReviewReq.getReviewText(),postReviewReq.getReviewRate());
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

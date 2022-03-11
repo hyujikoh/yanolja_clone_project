@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostReviewRes {
-    private String jwt;
     private int userIdx;
     private String reviewtext;
     private int reviewRate;
